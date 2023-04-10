@@ -6,6 +6,9 @@ import 'ant-design-vue/dist/antd.css';
 import './assets/main.css'
 import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import VueCookies from 'vue-cookies'
 
 const app = createApp(App)
 
@@ -26,7 +29,8 @@ app.use(router)
 //     //    next()
 //     // }
 //  })
-
+app.use(ElementPlus)
 app.mount('#app')
-
+app.use(VueCookies)
+Vue.prototype.$cookies = VueCookies;
 app.use(Antd);

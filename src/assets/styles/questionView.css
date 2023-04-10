@@ -1,0 +1,414 @@
+@charset "utf-8";
+.el-header {
+    background-color: black;
+    color: #fff;
+    opacity: calc(0.7);
+}
+
+.container1 {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    box-sizing: border-box;
+}
+
+.container2 {
+    margin-right: -15px;
+    margin-left: -15px;
+    box-sizing: border-box;
+}
+
+.container2_1 {
+    width: 66.6%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.container2_2 {
+    width: 33.3%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.questiontext {
+    background-color: rgba(230, 238, 232, 0.65);
+    box-shadow: 0px 0px 8px black;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 30px;
+    border-radius: 4px;
+}
+
+.questiontext:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 0px 50px black;
+}
+
+.questiontext_1 {
+    display: block;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    text-align: left;
+    font-size: 1.25em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    line-height: 1.2;
+    min-height: 2em;
+    color: black;
+}
+
+.questiontext_2 {
+    display: block;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    text-align: left;
+    font-size: 1em;
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+    color: black;
+}
+
+.inoutput {
+    margin: .5em 0;
+    padding: .3em .5em;
+    border: #ddd solid 1px;
+    background: #f8f8f8;
+    opacity: calc(0.7);
+    border-radius: 3px;
+    overflow: auto;
+    font-size: .875em;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+.inoutput:hover {
+    background-color: rgba(230, 238, 232, 0.65);
+}
+
+.questionlabel {
+    background-color: #d9534f;
+    padding: 2px 6px 3px;
+    margin: 0.5em 0.5em;
+    color: #fff;
+    float: left;
+    opacity: .70;
+    cursor: pointer;
+}
+
+.questionlabel:hover {
+    opacity: 1;
+}
+
+/*标签*/
+.example-showcase .el-select-v2 {
+    margin-right: 20px;
+}
+
+.button_submit {
+    border: 1px solid transparent;
+    background-color: black;
+    opacity: calc(0.5); 
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    background-image: none;
+    cursor: pointer;
+}
+
+/*色彩变幻*/
+.colorRotate {
+    color: #f35626;
+    /*font-family: 微软雅黑;*/
+    background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hue 10s infinite linear;
+    -webkit-animation: hue 10s infinite linear;
+}
+
+@keyframes hue {
+    from {
+        -webkit-filter: hue-rotate(0deg);
+        -moz-filter: hue-rotate(0deg);
+    }
+
+    to {
+        -webkit-filter: hue-rotate(-360deg);
+        -moz-filter: hue-rotate(-360deg);
+    }
+}
+
+.comments-title {
+    font-size: 14px;
+    text-align: center;
+    background-color: rgba(217, 237, 247, 0.8);
+    color: #3a87ad;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    word-wrap: break-word;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.1;
+    font-weight: bolder;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+.comment-a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-family: "Microsoft Yahei", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #25292f;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    margin: 10px 0px 10px 0px;
+    padding: 2px;
+    border-radius: 4px;
+    background-color: rgba(230, 238, 232, 0.65);
+    box-shadow: 0px 0px 8px black;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.comment-a:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 0px 50px black;
+}
+
+.comment-head {
+    background: rgba(217, 237, 247, 0.6);
+    position: relative;
+    height: auto;
+    min-height: 37px;
+    line-height: 37px;
+    padding-left: 45px;
+    box-sizing: border-box;
+}
+
+.comment-data {
+    text-transform: uppercase;
+    float: right;
+    margin-right: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.comment-content {
+    padding: 20px 55px 30px 45px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.comment-reply-link {
+    float: right;
+    margin-bottom: 3px;
+    margin-right: 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: block;
+    color: #3d4450;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.comment-author-photo {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    position: absolute;
+    display: block;
+    left: -40px;
+    top: 10px;
+    margin: 0;
+}
+
+.comment-replyauthor-photo {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: block;
+}
+
+.reply-box {
+    height: 65px;
+    font-weight: 400;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+}
+
+.reply-box-cotainer {
+    display: flex;
+    height: 65px;
+    transition: 0.2s;
+    font-weight: 400;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+.reply-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 50px;
+    box-sizing: border-box;
+}
+
+.reply-text {
+    position: relative;
+    flex: 1;
+}
+
+.reply-textarea {
+    width: 100%;
+    height: 100%;
+    padding: 5px 10px;
+    border: 1px solid #F1F2F3;;
+    border-radius: 6px;
+    background-color: #F1F2F3;;
+    font-family: inherit;
+    line-height: normal;
+    color: #18191C;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.reply-box-send {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-basis: 70px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 400;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    background-color: black;
+    opacity: calc(0.7);
+}
+
+.reply-box-send:hover {
+    opacity: calc(0.8);
+}
+
+.reply-send {
+    position: absolute;
+    z-index: 1;
+    font-size: 16px;
+    color: white;
+    font-weight: 400;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+.comment-nav {
+    margin-top: 20px;
+    display: block;
+    box-sizing: border-box;
+}
+
+.comment-page {
+    border-radius: 4px;
+    color: #1890ff;
+    background-color: transparent;
+    border: 2px solid #1890ff;
+    transition: all .3s ease;
+    display: inline-block;
+    margin: 0 0 10px 10px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.comment-page:hover {
+    color: white;
+    background-color: #1890ff;
+    border: 2px solid #1890ff;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.rw {
+    display: block;
+    margin-bottom: 1.3em;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgb(26 26 26 / 10%);
+    box-sizing: border-box;
+}
+
+.test-case {
+    background-color: rgb(82, 196, 26);
+    position: relative;
+    vertical-align: top;
+    cursor: pointer;
+    margin: 0.2em;
+    height: 6em;
+    width: 6em;
+    padding: 0;
+    color: #fff;
+}
+
+.test-case-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes slideInLeft {
+    0% {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+        visibility: visible
+    }
+
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+}
+
+@keyframes slideInright {
+    0% {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible
+    }
+
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+}

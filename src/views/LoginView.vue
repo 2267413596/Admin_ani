@@ -5,14 +5,15 @@
         <div id="windows">
             <div id="title">欢迎使用管理系统</div>
             <div class="input">
-                <a-input v-model:value="account" placeholder="请输入账号" />
+                <a-input v-model:value="account" prefix="📫" placeholder="请输入账号">
+                </a-input>
             </div>
             <div class="input">
-                <a-input v-model:value="password" placeholder="请输入密码" />
+                <a-input-password v-model:value="password" prefix="🔑" placeholder="请输入密码" />
             </div>
             <div>
             <a-row>
-                <a-col :span="4" :offset="10">
+                <a-col :span="7" :offset="10">
                     <a-button @click="login">登录</a-button>
                 </a-col>
                 <a-col :span="7">
@@ -30,19 +31,20 @@
 <style>
 #title{
     text-align: center;
-    top: -5vh;
     position: relative;
+    font-size: larger;
 }
 #windows {
     width: 28vw;
     min-width: 250pt;
-    /* 水平垂直居中 */
-    background-color: rgba(255, 255, 255, 0.5);
+    height: 35vh;
+    background-color: rgba(30, 100, 30, 0.2);
     margin: 0 auto;
     top: 30vh;
     position: relative;
     border-radius: 20px;
-    padding-bottom: 2vh;
+    padding: 2vh;
+    padding-top: 3vh;
 }
 .input{
     width: 20vw;
@@ -54,6 +56,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import Axios from 'axios';
+import { UserOutlined, InfoCircleOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
     beforeCreate() {
