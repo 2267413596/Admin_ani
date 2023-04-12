@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
+import { useCookies } from "vue3-cookies";
+
+const { cookies } = useCookies();
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,22 +15,34 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AdminView.vue'),
       children:[
         {
-          path:'/users',
-          component:()=>import('../views/admin/usersView.vue'),
-        },
-        {
-          path:'/users',
-          component:()=>import('../views/UserManage/UserManage.vue'),
+          path:'/admin/users',
+          component:()=>import('../views/admin/UsersView.vue'),
         },
       ]
-    }
+    },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.path == '/') {
+      next();
+  } else {
+      // 获取 token
+      const token = cookies.get('myCookie');
+      console.log(token)
+      // token 不存在
+      if(from.path == '/') {
+        alert('身份验证失败');
+      } else if (token === null || token === 'aa') {
+          alert('登录已过期');
+          next('/');
+      } else {
+          next();
+      }
+  }
+});
 
 export default router

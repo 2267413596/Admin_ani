@@ -17,11 +17,11 @@
         <!-- 表格 -->
         <div id="table" class="basic-box" style="margin:20px;">
             <el-table :data="tableData" style="width: 100%" max-height="250">
-                <el-table-column prop="date" label="邮箱" width="200" />
+                <el-table-column prop="email" label="邮箱" width="200" />
                 <el-table-column prop="name" label="用户昵称" width="120" />
-                <el-table-column prop="state" label="密码" width="180" />
-                <el-table-column prop="city" label="手机号" width="180" />
-                <el-table-column prop="zip" label="状态" width="100" />
+                <el-table-column prop="password" label="密码" width="180" />
+                <el-table-column prop="phone" label="手机号" width="180" />
+                <el-table-column prop="status" label="状态" width="100" />
                 <el-table-column fixed="right" label="Operations">
                     <template #default="scope">
                         <el-button link type="primary" size="small" @click.prevent="deleteRow(scope.$index)">
@@ -41,7 +41,7 @@
 </template>
 
 <style>
-@import '../assets/styles/userView.css';
+@import '../../assets/styles/userView.css';
 
 #search {
     background-color: aquamarine;
@@ -49,50 +49,29 @@
 </style>
 
 <script>
-export default {
-    data() {
-        return {
-            checked1: true,
-            currentPage: 1,
-            search_content: '',
-            tableData: [
-                {
-                    date: '20373593@buaa.edu.cn',
-                    name: 'Tom',
-                    state: 'abcd1234',
-                    city: '12345678901',
-                    address: 'No. 189, Grove St, Los Angeles',
-                    zip: '正常',
-                    tag: 'Home',
-                },
-                {
-                    date: '20373593@buaa.edu.cn',
-                    name: 'Tom',
-                    state: 'abcd1234',
-                    city: '12345678901',
-                    address: 'No. 189, Grove St, Los Angeles',
-                    zip: '正常',
-                    tag: 'Home',
-                },
-                {
-                    date: '20373593@buaa.edu.cn',
-                    name: 'Tom',
-                    state: 'abcd1234',
-                    city: '12345678901',
-                    address: 'No. 189, Grove St, Los Angeles',
-                    zip: '正常',
-                    tag: 'Home',
-                },
-            ]
-        }
+import { defineComponent, ref } from 'vue';
+import Axios from 'axios';
+import { useCookies } from "vue3-cookies";
+
+export default defineComponent({
+    beforeCreate() {
+        document.querySelector('body')
+        .setAttribute('style', 'margin: 0')
     },
-    methods: {
-        handleCurrentChange() {
-            Console.log(currentPage)
-        },
-        editPage() {
-            this.$router.replace('/administrator/edit')
+    setup() {
+        const tableData = [
+            {
+                email: '这是邮箱',
+                name: '这是昵称',
+                password: '密码',
+                phone: '电话',
+                status: '被拉黑'
+            },
+
+        ]
+        return {
+            tableData
         }
     }
-}
+})
 </script>

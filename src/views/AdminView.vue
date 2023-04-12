@@ -2,7 +2,7 @@
     <div id="root">
         <el-container style="box-sizing: border-box;">
             <el-header>
-                <p style="color: white; margin-top: 10px; margin-left: 20px; text-align: center; font-size: 30px">管理员主页</p>
+                <p style="color: white; text-align: center; margin: 5px;font-size: 30px">管理员主页</p>
             </el-header>
             <div>
                 <el-container>
@@ -26,13 +26,13 @@
                                 </el-icon>
                                 <span>审核日志</span>
                             </el-menu-item>
-                            <el-menu-item index="4" @click="respone">
+                            <el-menu-item index="4" @click="response">
                                 <el-icon>
                                     <ChatLineRound />
                                 </el-icon>
                                 <span>求助回应</span>
                             </el-menu-item>
-                            <el-menu-item index="5" @click="userManage">
+                            <el-menu-item index="5" @click="users">
                                 <el-icon>
                                     <User />
                                 </el-icon>
@@ -56,30 +56,45 @@
 
 
 <script>
-export default {
-    methods: {
-        tweet() {
-            this.$router.replace('/admin/tweet')
-        },
-        record() {
-            this.$router.replace('/admin/record')
-        },
-        log() {
-            this.$router.replace('/admin/log')
-        },
-        respone() {
-            this.$router.replace('/admin/respone')
-        },
-        userManage() {
-            this.$router.replace('/admin/users')
-        }
+import { defineComponent, ref } from 'vue';
+import Axios from 'axios';
+import { useCookies } from "vue3-cookies";
+import {useRouter} from 'vue-router'
+
+export default defineComponent({
+    beforeCreate() {
+        document.querySelector('body')
+        .setAttribute('style', 'margin: 0')
     },
-    data() {
+    setup() {
+        const router=useRouter();
+        const { cookies } = useCookies();
+        const comment = () => {
+            router.replace('/admin/comment')
+        };
+        const response = () => {
+            router.replace('/admin/response')
+        };
+        const log = () => {
+            router.replace('/admin/checkLog')
+        };
+        const users = () => {
+            router.replace('/admin/users')
+        };
+        const tweet = () => {
+            router.replace('/admin/tweet')
+        };
+        const record = () => {
+            router.replace('/admin/record')
+        };
         return {
-            input1: '',
-            input2: '',
-            isCollapse: false
+            record,
+            tweet,
+            users,
+            log,
+            response,
+            comment
         }
     }
-}
+})
 </script>
