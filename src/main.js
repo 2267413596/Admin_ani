@@ -7,6 +7,9 @@ axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import  VueCookies  from 'vue3-cookies';
+import "./assets/styles/scrollbar.css";
+import "./assets/styles/global.css";
+import "./assets/styles/userView.css";
 
 
 const app = createApp(App)

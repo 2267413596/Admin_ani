@@ -7,16 +7,17 @@
   </el-dialog>
   <el-row >
     <el-col :span="4" :offset="1">
+      <span style="margin-left: 50px;">待审核评论：</span>
       <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-        <li v-for="i in count" :key="i" class="infinite-list-item">{{ i }}</li>
+        <li v-for="i in count" :key="i" class="infinite-list-item">abc</li>
       </ul>
     </el-col>
     <el-col :span="12" :offset="1" v-if="!this.empty">
-      <div class="basic-box" id="infomation">
+      <div class="basic-box" id="infomation" style="font-size: 8px">
         <p style="text-align: center;">基本信息</p>
         <el-row>
           <el-col :span="8">
-            <span>标题：{{ this.pr_name }}</span>
+            <span>帖子id: {{ this.pr_name }}</span>
           </el-col>
           <el-col :span="8">
             <span>用户：{{ this.user_name }}</span>
@@ -27,7 +28,7 @@
         </el-row>
       </div>
       <div class="basic-box" id="comment">
-        <p style="text-align: center;">帖子内容</p>
+        <p style="text-align: center;">评论内容</p>
         <span>{{ content }}</span>
       </div>
     </el-col>
@@ -50,6 +51,7 @@
 
 <style>
 @import '../../assets/styles/global.css';
+@import '../../assets/styles/userView.css';
 
 #bottom {
   bottom: 10px;
@@ -65,14 +67,33 @@
 #infomation {
   margin-bottom: 20px;
 }
+.infinite-list {
+  height: 300px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: var(--el-color-primary-light-9);
+  margin: 10px;
+  color: var(--el-color-primary);
+}
+.infinite-list .infinite-list-item + .list-item {
+  margin-top: 10px;
+}
 </style>
 
 <script>
+import { defineComponent, onMounted, ref } from 'vue';
+import Axios from 'axios';
+import { useCookies } from "vue3-cookies";
+import { method } from 'lodash';
+
 export default defineComponent({
-    beforeCreate() {
-        document.querySelector('body')
-        .setAttribute('style', 'background-image: url(/back.jpg); background-size: 100% 100%; background-repeat: no-repeat;')
-    },
     setup() {
         const { cookies } = useCookies();
         let formData = new window.FormData();
@@ -85,6 +106,7 @@ export default defineComponent({
                 "Authorization": "",
             }
         };
+        const count = ref(1)
         const showModal = () => {
         visible.value = true;
         };
@@ -125,8 +147,34 @@ export default defineComponent({
             login,
             token,
             cookies,
-            config
+            config,
+            count
         };
+    },
+    data() {
+      return {
+        reason: '',
+        review_list: [
+        ],
+        content: "abc",
+        review_id: -1,
+        empty: false,
+        review_date: '2023-4-12 10:43:13',
+        review_status: '未知',
+        user_name: '123',
+        get_reviewurl: 'http://database.vip.cpolar.cn/admin_page/get_review',
+        check_reviewurl: 'http://database.vip.cpolar.cn/admin_page/check_review',
+        review_index: -1,
+        pr_name: '0',
+        pr_id: 0,
+      }
+    },
+    methods: {
+      load() {
+        if(this.count < 1) {
+          this.count += 1
+        }
+      }
     }
 });
 

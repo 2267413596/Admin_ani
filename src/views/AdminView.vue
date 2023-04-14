@@ -9,30 +9,34 @@
                     <el-scrollbar>
                     <el-aside :width="isCollapse ? '64px' : '200px'">
                         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                            text-color="#fff" @open="handleOpen" @close="handleClose">
+                            text-color="#fff" >
                             <el-menu-item index="1" @click="tweet">
                                 <el-icon><View /></el-icon>
                                 <span>帖子审核</span>
                             </el-menu-item>
-                            <el-menu-item index="2" @click="record">
+                            <el-menu-item index="2" @click="comment">
+                                <el-icon><View /></el-icon>
+                                <span>评论审核</span>
+                            </el-menu-item>
+                            <el-menu-item index="3" @click="record">
                                 <el-icon>
                                     <setting />
                                 </el-icon>
                                 <span>编辑档案</span>
                             </el-menu-item>
-                            <el-menu-item index="3" @click="log">
+                            <el-menu-item index="4" @click="log">
                                 <el-icon>
                                     <document />
                                 </el-icon>
                                 <span>审核日志</span>
                             </el-menu-item>
-                            <el-menu-item index="4" @click="response">
+                            <el-menu-item index="5" @click="response">
                                 <el-icon>
                                     <ChatLineRound />
                                 </el-icon>
                                 <span>求助回应</span>
                             </el-menu-item>
-                            <el-menu-item index="5" @click="users">
+                            <el-menu-item index="6" @click="users">
                                 <el-icon>
                                     <User />
                                 </el-icon>

@@ -21,6 +21,14 @@ const router = createRouter({
           path:'/admin/users',
           component:()=>import('../views/admin/UsersView.vue'),
         },
+        {
+          path:'/admin/comment',
+          component:()=>import('../views/admin/CommentView.vue'),
+        },
+        {
+          path:'/admin/tweet',
+          component:()=>import('../views/admin/TweetView.vue'),
+        },
       ]
     },
   ]
@@ -34,10 +42,8 @@ router.beforeEach((to, from, next) => {
       const token = cookies.get('myCookie');
       console.log(token)
       // token 不存在
-      if(from.path == '/') {
-        alert('身份验证失败');
-      } else if (token === null || token === 'aa') {
-          alert('登录已过期');
+      if (token === null) {
+          alert('登录已过期，请重新登录');
           next('/');
       } else {
           next();

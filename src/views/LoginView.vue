@@ -84,30 +84,21 @@ export default defineComponent({
         visible.value = false;
         };
         const login = () => {
-            router.replace('/admin/')
-            // formData.append('username', account.value);
-            // formData.append('password', password.value);
-            // Axios.post('/api/login', formData)
-            // .then((response) => {
-            //     console.log(response);
-            //     token = response.data.body.token;
-            //     console.log(token.value);
-            //     cookies.set("myCookie", token.value);
-            //     // this.$router.replace('/admin')
-            //     this.config.headers.value = cookies.get('myCookie')
-            //     Axios.get('/api/hello', this.config)
-            //     .then((response) =>{
-            //         alert(0);
-            //         console.log(response);
-            //     })
-            //     .catch((response) => {
-            //         alert(1);
-            //         console.log(response);
-            //     })
-            // })
-            // .catch((response) => {
-            //     console.log(response);
-            // })
+            formData.append('username', account.value);
+            formData.append('password', password.value);
+            cookies.set('myCookie', 'aa')
+            Axios.post('/api/login', formData)
+            .then((response) => {
+                console.log(response.data.body.token);
+                cookies.set("myCookie", response.data.body.token);
+                // this.$router.replace('/admin')
+                router.replace('/admin')
+                console.log(cookies.get("myCookie"));
+            })
+            .catch((response) => {
+                alert('网络错误!')
+                console.log(response);
+            })
         };
         return {
             password,

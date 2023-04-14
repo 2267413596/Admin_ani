@@ -16,9 +16,9 @@
         </div>
         <!-- 表格 -->
         <div id="table" class="basic-box" style="margin:20px;">
-            <el-table :data="tableData" style="width: 100%" max-height="250">
+            <el-table :data="tableData.list" style="width: 100%" max-height="250" v-loading="loading">
                 <el-table-column prop="email" label="邮箱" width="200" />
-                <el-table-column prop="name" label="用户昵称" width="120" />
+                <el-table-column prop="username" label="用户昵称" width="120" />
                 <el-table-column prop="password" label="密码" width="180" />
                 <el-table-column prop="phone" label="手机号" width="180" />
                 <el-table-column prop="status" label="状态" width="100" />
@@ -49,29 +49,44 @@
 </style>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref, reactive } from 'vue';
 import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
+import {useRouter} from 'vue-router'
 
+const loading = ref(true)
 export default defineComponent({
+    
     beforeCreate() {
         document.querySelector('body')
         .setAttribute('style', 'margin: 0')
     },
     setup() {
-        const tableData = [
-            {
-                email: '这是邮箱',
-                name: '这是昵称',
-                password: '密码',
-                phone: '电话',
-                status: '被拉黑'
-            },
-
-        ]
+        let tableData = reactive({list:[]})
+        let formData = new window.FormData();
+        const { cookies } = useCookies();
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': cookies.get('myCookie'),
+        }
+        tableData.list.push(
+                {
+                    "username": 'abc',
+                    'email': '123@buaa.edu.cn',
+                    'phone': '12345678901',
+                    'status': '正常'
+                }
+            )
         return {
+            formData,
+            cookies,
+            headers,
+            loading,
             tableData
         }
+    },
+    beforeCreate() {
+        loading.value = false
     }
 })
 </script>
