@@ -37,6 +37,10 @@ const router = createRouter({
           path:'/admin/adopt',
           component:()=>import('../views/admin/AdoptView.vue'),
         },
+        {
+          path:'/admin/response',
+          component:()=>import('../views/admin/ResponseView.vue'),
+        },
       ]
     },
   ]
