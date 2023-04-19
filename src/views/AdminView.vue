@@ -9,7 +9,7 @@
                     <el-scrollbar>
                     <el-aside :width="isCollapse ? '64px' : '200px'">
                         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                            text-color="#fff" >
+                            text-color="#fff" default-active="1">
                             <el-menu-item index="1" @click="tweet">
                                 <el-icon><View /></el-icon>
                                 <span>帖子审核</span>

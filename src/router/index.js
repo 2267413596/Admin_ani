@@ -29,6 +29,10 @@ const router = createRouter({
           path:'/admin/tweet',
           component:()=>import('../views/admin/TweetView.vue'),
         },
+        {
+          path:'/admin/record',
+          component:()=>import('../views/admin/RecordView.vue'),
+        },
       ]
     },
   ]

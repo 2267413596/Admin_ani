@@ -69,14 +69,29 @@ export default defineComponent({
             'Content-Type': 'application/json',
             'Authorization': cookies.get('myCookie'),
         }
-        tableData.list.push(
-                {
-                    "username": 'abc',
-                    'email': '123@buaa.edu.cn',
-                    'phone': '12345678901',
-                    'status': '正常'
+        Axios.post('/api/admin/user/get', {
+            "pageNum": 20,
+	        "page": 1,
+	        "context": "",
+	        "isBlack": false,
+        }, {headers}
+        ).then((response) =>{
+            console.log(response)
+            for (var i = 0; i < response.data.body.users.length; i++) {
+                var item = response.data.body.users[i]
+                if(item.isBlack == true) {
+                    item['status'] = '已拉黑'
+                } else {
+                    item['status'] = '正常'
                 }
-            )
+                tableData.list.push(item)
+            }
+            console.log(tableData.list)
+        })
+        .catch((response) => {
+            alert('网络错误');
+            console.log(response);
+        })
         return {
             formData,
             cookies,

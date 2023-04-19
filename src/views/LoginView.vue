@@ -92,7 +92,7 @@ export default defineComponent({
                 console.log(response.data.body.token);
                 cookies.set("myCookie", response.data.body.token);
                 // this.$router.replace('/admin')
-                router.replace('/admin')
+                router.replace('/admin/tweet')
                 console.log(cookies.get("myCookie"));
             })
             .catch((response) => {
