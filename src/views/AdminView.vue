@@ -24,11 +24,11 @@
                                 </el-icon>
                                 <span>编辑档案</span>
                             </el-menu-item>
-                            <el-menu-item index="4" @click="log">
+                            <el-menu-item index="4" @click="adopt">
                                 <el-icon>
                                     <document />
                                 </el-icon>
-                                <span>审核日志</span>
+                                <span>审核领养</span>
                             </el-menu-item>
                             <el-menu-item index="5" @click="response">
                                 <el-icon>
@@ -74,28 +74,28 @@ export default defineComponent({
         const router=useRouter();
         const { cookies } = useCookies();
         const comment = () => {
-            router.replace('/admin/comment')
+            router.push('/admin/comment')
         };
         const response = () => {
-            router.replace('/admin/response')
+            router.push('/admin/response')
         };
-        const log = () => {
-            router.replace('/admin/checkLog')
+        const adopt = () => {
+            router.push('/admin/adopt')
         };
         const users = () => {
-            router.replace('/admin/users')
+            router.push('/admin/users')
         };
         const tweet = () => {
-            router.replace('/admin/tweet')
+            router.push('/admin/tweet')
         };
         const record = () => {
-            router.replace('/admin/record')
+            router.push('/admin/record')
         };
         return {
             record,
             tweet,
             users,
-            log,
+            adopt,
             response,
             comment
         }

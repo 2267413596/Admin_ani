@@ -33,6 +33,10 @@ const router = createRouter({
           path:'/admin/record',
           component:()=>import('../views/admin/RecordView.vue'),
         },
+        {
+          path:'/admin/adopt',
+          component:()=>import('../views/admin/AdoptView.vue'),
+        },
       ]
     },
   ]
