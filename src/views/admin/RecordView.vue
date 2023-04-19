@@ -48,6 +48,21 @@
                 <el-form-item label="动物介绍">
                     <el-input v-model="intro" type="textarea" />
                 </el-form-item>
+                <el-form-item label="动物图片">
+                    <a-upload
+                        v-model:file-list="fileList"
+                        name="file"
+                        :multiple="true"
+                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        :headers="headers"
+                        @change="handleChange"
+                    >
+                        <a-button>
+                        <upload-outlined></upload-outlined>
+                        Click to Upload
+                        </a-button>
+                    </a-upload>
+                </el-form-item>
                 <el-form-item label="领养状态">
                     <el-select v-model="adopted">
                         <el-option label="已领养" value=true />
@@ -79,7 +94,9 @@
 import { defineComponent, onMounted, ref, reactive } from 'vue';
 import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
-import {useRouter} from 'vue-router'
+import { message } from 'ant-design-vue';
+import { UploadOutlined } from '@ant-design/icons-vue';
+
 
 const loading = ref(false)
 const context = ref('')
@@ -89,12 +106,25 @@ const headers = {
     'Authorization': cookies.get('myCookie'),
 }
 export default defineComponent({
-    
+    components: {
+        UploadOutlined,
+    },
     beforeCreate() {
         document.querySelector('body')
         .setAttribute('style', 'margin: 0')
     },
     setup() {
+        const handleChange = info => {
+            if (info.file.status !== 'uploading') {
+                console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+                message.success(`${info.file.name} file uploaded successfully`);
+            } else if (info.file.status === 'error') {
+                message.error(`${info.file.name} file upload failed.`);
+            }
+        };
+        const fileList = ref([]);
         const dialogVisible = ref(false)
         let tableData = reactive({list:[
             {
@@ -138,7 +168,12 @@ export default defineComponent({
             dialogVisible,
             intro,
             name,
-            adopted
+            adopted,
+            fileList,
+            headers: {
+                authorization: 'authorization-text',
+            },
+            handleChange,
         }
     },
     methods: {

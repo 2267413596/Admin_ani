@@ -3,7 +3,7 @@
         <!-- 搜索框 -->
         <div class="basic-box" style="margin:20px;">
             <el-row :gutter="20">
-                <el-select v-model="adopted">
+                <el-select v-model="select">
                         <el-option label="所有求助" value=0 />
                         <el-option label="已解决求助" value=1 />
                         <el-option label="待解决求助" value=2 />
@@ -32,7 +32,7 @@
                 </el-table-column>
             </el-table>
             <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage"
-                layout="total, prev, pager, next" :total="10">
+                layout="total, prev, pager, next" :total="2">
             </el-pagination>
         </div>
     </div>
@@ -60,42 +60,57 @@ export default defineComponent({
         .setAttribute('style', 'margin: 0')
     },
     setup() {
-        let tableData = reactive({list:[]})
+        let tableData = reactive({list:[
+            {
+                id: 1,
+                username: 'test',
+                title: '动物失踪',
+                status: '已解决'
+            },
+            {
+                id: 2,
+                username: '123',
+                title: '被猫猫抓伤了怎么办',
+                status: '待解决'
+            }
+        ]})
         let formData = new window.FormData();
         const { cookies } = useCookies();
+        const select = ref('')
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': cookies.get('myCookie'),
         }
-        Axios.post('/api/admin/user/get', {
-            "pageNum": 20,
-	        "page": 1,
-	        "context": "",
-	        "isBlack": false,
-        }, {headers}
-        ).then((response) =>{
-            console.log(response)
-            for (var i = 0; i < response.data.body.users.length; i++) {
-                var item = response.data.body.users[i]
-                if(item.isBlack == true) {
-                    item['status'] = '已拉黑'
-                } else {
-                    item['status'] = '正常'
-                }
-                tableData.list.push(item)
-            }
-            console.log(tableData.list)
-        })
-        .catch((response) => {
-            alert('网络错误');
-            console.log(response);
-        })
+        // Axios.post('/api/admin/user/get', {
+        //     "pageNum": 20,
+	    //     "page": 1,
+	    //     "context": "",
+	    //     "isBlack": false,
+        // }, {headers}
+        // ).then((response) =>{
+        //     console.log(response)
+        //     for (var i = 0; i < response.data.body.users.length; i++) {
+        //         var item = response.data.body.users[i]
+        //         if(item.isBlack == true) {
+        //             item['status'] = '已拉黑'
+        //         } else {
+        //             item['status'] = '正常'
+        //         }
+        //         tableData.list.push(item)
+        //     }
+        //     console.log(tableData.list)
+        // })
+        // .catch((response) => {
+        //     alert('网络错误');
+        //     console.log(response);
+        // })
         return {
             formData,
             cookies,
             headers,
             loading,
-            tableData
+            tableData,
+            select
         }
     },
     beforeCreate() {
