@@ -162,7 +162,6 @@ export default defineComponent({
             email,
             aniname,
             username,
-            empty,
             count
         }
     },

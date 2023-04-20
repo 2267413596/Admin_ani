@@ -2,7 +2,6 @@
 .el-header {
     background-color: black;
     color: #fff;
-    opacity: calc(0.7);
 }
 
 .container1 {
@@ -86,7 +85,6 @@
     padding: .3em .5em;
     border: #ddd solid 1px;
     background: #f8f8f8;
-    opacity: calc(0.7);
     border-radius: 3px;
     overflow: auto;
     font-size: .875em;
@@ -120,7 +118,6 @@
 .button_submit {
     border: 1px solid transparent;
     background-color: black;
-    opacity: calc(0.5); 
     box-sizing: border-box;
     border-radius: 4px;
     font-size: 14px;
@@ -133,9 +130,7 @@
 .colorRotate {
     color: #f35626;
     /*font-family: 微软雅黑;*/
-    background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
-    background-clip: text;
-    -webkit-background-clip: text;
+    
     -webkit-text-fill-color: transparent;
     animation: hue 10s infinite linear;
     -webkit-animation: hue 10s infinite linear;
@@ -165,7 +160,6 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     word-wrap: break-word;
     box-sizing: border-box;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 1.1;
     font-weight: bolder;
     border: 1px solid transparent;
@@ -175,7 +169,6 @@
 
 .comment-a {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family: "Microsoft Yahei", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.428571429;
     color: #25292f;
@@ -310,11 +303,6 @@
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     background-color: black;
-    opacity: calc(0.7);
-}
-
-.reply-box-send:hover {
-    opacity: calc(0.8);
 }
 
 .reply-send {

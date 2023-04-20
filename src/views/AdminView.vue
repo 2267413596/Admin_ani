@@ -9,7 +9,7 @@
                     <el-scrollbar>
                     <el-aside :width="isCollapse ? '64px' : '200px'">
                         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                            text-color="#fff" default-active="1">
+                            text-color="#fff" default-active="1" vue-router="true">
                             <el-menu-item index="1" @click="tweet">
                                 <el-icon><View /></el-icon>
                                 <span>帖子审核</span>
@@ -65,6 +65,7 @@ import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
 import {useRouter} from 'vue-router'
 
+const activePath = ref('/admin/tweet')
 export default defineComponent({
     beforeCreate() {
         document.querySelector('body')
@@ -75,21 +76,27 @@ export default defineComponent({
         const { cookies } = useCookies();
         const comment = () => {
             router.push('/admin/comment')
+            activePath = router.currentRoute.value.path
         };
         const response = () => {
             router.push('/admin/response')
+            activePath = router.currentRoute.value.path
         };
         const adopt = () => {
             router.push('/admin/adopt')
+            activePath = router.currentRoute.value.path
         };
         const users = () => {
             router.push('/admin/users')
+            activePath = router.currentRoute.value.path
         };
         const tweet = () => {
             router.push('/admin/tweet')
+            activePath = router.currentRoute.value.path
         };
         const record = () => {
             router.push('/admin/record')
+            activePath = router.currentRoute.value.path
         };
         return {
             record,

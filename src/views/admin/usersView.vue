@@ -54,7 +54,7 @@ import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
 import {useRouter} from 'vue-router'
 
-const loading = ref(true)
+const loading = ref(false)
 export default defineComponent({
     
     beforeCreate() {
@@ -100,8 +100,5 @@ export default defineComponent({
             tableData
         }
     },
-    beforeCreate() {
-        loading.value = false
-    }
 })
 </script>

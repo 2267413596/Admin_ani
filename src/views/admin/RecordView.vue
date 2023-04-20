@@ -143,7 +143,6 @@ export default defineComponent({
             "pageNum": 20,
 	        "page": 0,
 	        "context": "",
-	        "isBlack": false,
         }, {headers}
         ).then((response) =>{
             for (var i = 0; i < response.data.body.record.length; i++) {

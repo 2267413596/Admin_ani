@@ -17,7 +17,6 @@
     padding-top: 20px;
     background-color: black;
     color: #fff;
-    opacity: calc(0.7);
     z-index: 1111;
 }
 
@@ -94,11 +93,6 @@
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     background-color: black;
-    opacity: calc(0.7);
-}
-
-.change-upi:hover {
-    opacity: calc(0.8);
 }
 
 .change-upi-send {
