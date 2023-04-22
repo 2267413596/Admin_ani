@@ -7,7 +7,7 @@
             <div>
                 <el-container>
                     <el-scrollbar>
-                    <el-aside :width="isCollapse ? '64px' : '200px'">
+                    <el-aside :width="'200px'">
                         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
                             text-color="#fff" default-active="1" vue-router="true">
                             <el-menu-item index="1" @click="tweet">

@@ -10,7 +10,7 @@
                     <el-button type="primary" icon="Search">搜索  </el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="primary" icon="Search">新增档案</el-button>
+                    <el-button type="primary" icon="Search" @click="add">新增档案</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -31,8 +31,8 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage"
-                layout="total, prev, pager, next" :total="1">
+            <el-pagination @current-change="handleCurrentChange" 
+                layout="total, prev, pager, next" :total="totalNum" >
             </el-pagination>
         </div>
         <el-dialog
@@ -52,8 +52,7 @@
                     <a-upload
                         v-model:file-list="fileList"
                         name="file"
-                        :multiple="true"
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        action="/api/picture/upload"
                         :headers="headers"
                         @change="handleChange"
                     >
@@ -79,6 +78,49 @@
                 </span>
             </template>
         </el-dialog>
+        <el-dialog
+            v-model="dialogVisible1"
+            title="编辑档案"
+            width="50%"
+            :before-close="handleClose"
+            >
+            <el-form :model="form" label-width="120px">
+                <el-form-item label="动物名称">
+                    <el-input v-model="name" />
+                </el-form-item>
+                <el-form-item label="动物介绍">
+                    <el-input v-model="intro" type="textarea" />
+                </el-form-item>
+                <el-form-item label="动物图片">
+                    <a-upload
+                        v-model:file-list="fileList"
+                        name="file"
+                        action="/api/picture/upload"
+                        :headers="headers"
+                        @change="handleChange"
+                    >
+                        <a-button>
+                        <upload-outlined></upload-outlined>
+                        Click to Upload
+                        </a-button>
+                    </a-upload>
+                </el-form-item>
+                <el-form-item label="领养状态">
+                    <el-select v-model="adopted">
+                        <el-option label="已领养" value=true />
+                        <el-option label="未领养" value=false />
+                    </el-select>
+                    </el-form-item>
+                </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                <el-button @click="dialogVisible1 = false">取消</el-button>
+                <el-button type="primary" @click="confirm1">
+                    保存
+                </el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -99,12 +141,8 @@ import { UploadOutlined } from '@ant-design/icons-vue';
 
 
 const loading = ref(false)
-const context = ref('')
 const { cookies } = useCookies();
-const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': cookies.get('myCookie'),
-}
+
 export default defineComponent({
     components: {
         UploadOutlined,
@@ -114,46 +152,52 @@ export default defineComponent({
         .setAttribute('style', 'margin: 0')
     },
     setup() {
+        const context = ref('')
+        const lastImage = ref('')
+        const id = ref(0)
+        const headers = {
+            'Authorization': cookies.get('myCookie'),
+        }
+        const totalNum = ref(0)
         const handleChange = info => {
+            console.log(info)
             if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
             }
             if (info.file.status === 'done') {
                 message.success(`${info.file.name} file uploaded successfully`);
+                this.lastImage = info.response
             } else if (info.file.status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);
             }
         };
         const fileList = ref([]);
         const dialogVisible = ref(false)
+        const dialogVisible1 = ref(false)
         let tableData = reactive({list:[
-            {
-                id: 1,
-                name: '馆长',
-                status: '未领养',
-                intro: '馆长是一只可爱的猫猫',
-                adopted: false
-            }
         ]})
         const intro = ref('')
         const name = ref('')
         const adopted = ref(false)
         let formData = new window.FormData();
-        Axios.post('api/admin/anim/get', {
+        Axios.post('/api/admin/animal/get', {
             "pageNum": 20,
-	        "page": 0,
+	        "page": 1,
 	        "context": "",
         }, {headers}
         ).then((response) =>{
-            for (var i = 0; i < response.data.body.record.length; i++) {
-                var item = response.data.body.record[i]
+            console.log(response)
+            for (var i = 0; i < response.data.body.records.length; i++) {
+                var item = response.data.body.records[i]
                 if(item.adopted == true) {
                     item['status'] = '已领养'
                 } else {
                     item['status'] = '未领养'
                 }
-                this.tableData.list.push(item)
+                tableData.list.push(item)
         }
+        totalNum.value = response.data.body.sumNum
+        console.log(totalNum)
         })
         .catch((response) => {
             alert('网络错误');
@@ -169,10 +213,14 @@ export default defineComponent({
             name,
             adopted,
             fileList,
-            headers: {
-                authorization: 'authorization-text',
-            },
             handleChange,
+            totalNum,
+            formData,
+            headers,
+            context,
+            lastImage,
+            id,
+            dialogVisible1
         }
     },
     methods: {
@@ -180,24 +228,126 @@ export default defineComponent({
             this.intro = this.tableData.list[index].intro
             this.name = this.tableData.list[index].name
             this.adopted = this.tableData.list[index].adopted
+            this.id = this.tableData.list[index].id
             this.dialogVisible = true;
         },
-        confirm() {
-            Axios.post('api/admin/record/modify/', {
-                "name": name.value,
-                "intro": intro.value,
-                "adopted": adopted.value,
+        add() {
+            this.intro = ''
+            this.name = ''
+            this.adopted = ''
+            this.dialogVisible1 = true;
+        },
+        confirm() { //修改
+            Axios.post('api/admin/animal/modify/', {
+                "recordId": this.id,
+                "name": this.name,
+                "intro": this.intro,
+                "adopted": this.adopted,
+                "imageId": this.lastImage
             }, {headers}
             ).then((response) =>{
-                if(response.data.body.code == 0) {
-                    alert('请重新登录');
+                if(response.data.body.code == 2) {
+                    ElMessage.error('请重新登录');
+                }
+                if(response.data.body.code == 1) {
+                    ElMessage.error('动物不存在');
                 }
                 console.log(response);
+                this.lastImage = '';
             }
             )
             .catch((response) => {
-                alert('网络错误');
+                ElMessage.error('网络错误')
+            })
+            this.loading = true
+            Axios.post('/api/admin/animal/get', {
+                "pageNum": 20,
+                "page": 0,
+                "context": this.context
+            }, {headers}
+            ).then((response) =>{
+                this.tableData.list = []
+                for (var i = 0; i < response.data.body.records.length; i++) {
+                    var item = response.data.body.records[i]
+                    if(item.adopted == true) {
+                        item['status'] = '已领养'
+                    } else {
+                        item['status'] = '未领养'
+                    }
+                    tableData.list.push(item)
+            }
+            totalNum.value = response.data.body.sumNum
+            this.loading = false
+            })
+            .catch((response) => {
+                ElMessage.error('网络错误')
+            })
+        },
+        confirm1() {    //新增
+            Axios.post('api/admin/animal/addrecord/', {
+                "name": this.name,
+                "intro": this.intro,
+                "adopted": this.adopted,
+                "imageId": this.lastImage
+            }, {headers}
+            ).then((response) =>{
+                if(response.data.body.code == 2) {
+                    ElMessage.error('请重新登录');
+                }
                 console.log(response);
+                ElMessage.error('保存成功');
+            }
+            )
+            .catch((response) => {
+                ElMessage.error('网络错误')
+            })
+            this.loading = true
+            Axios.post('/api/admin/animal/get', {
+                "pageNum": 20,
+                "page": 0,
+                "context": this.context
+            }, {headers}
+            ).then((response) =>{
+                this.tableData.list = []
+                for (var i = 0; i < response.data.body.records.length; i++) {
+                    var item = response.data.body.records[i]
+                    if(item.adopted == true) {
+                        item['status'] = '已领养'
+                    } else {
+                        item['status'] = '未领养'
+                    }
+                    tableData.list.push(item)
+            }
+            totalNum.value = response.data.body.sumNum
+            this.loading = false
+            })
+            .catch((response) => {
+                ElMessage.error('网络错误')
+            })
+        },
+        handleCurrentChange(index) {
+            this.loading = true
+            Axios.post('/api/admin/animal/get', {
+                "pageNum": 20,
+                "page": index,
+                "context": this.context
+            }, {headers}
+            ).then((response) =>{
+                this.tableData.list = []
+                for (var i = 0; i < response.data.body.records.length; i++) {
+                    var item = response.data.body.records[i]
+                    if(item.adopted == true) {
+                        item['status'] = '已领养'
+                    } else {
+                        item['status'] = '未领养'
+                    }
+                    tableData.list.push(item)
+            }
+            totalNum.value = response.data.body.sumNum
+            this.loading = false
+            })
+            .catch((response) => {
+                ElMessage.error('网络错误')
             })
         }
     }
