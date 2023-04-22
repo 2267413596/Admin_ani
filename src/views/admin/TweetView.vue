@@ -38,12 +38,12 @@
     </el-row>
     <div class="basic-box" id="bottom" v-if="!this.empty">
       <el-input v-model="this.reason" placeholder="请输入内容" style="margin-bottom: 20px;"></el-input>
-      <el-row :gutter="1000">
-        <el-col :span="3">
+      <el-row >
+        <el-col :span="22">
           <el-button type="danger" @click="fail">驳回</el-button>
         </el-col>
         <el-row>
-          <el-col :span="3">
+          <el-col :span="2" >
             <el-button type="success" @click="pass">通过</el-button>
           </el-col>
         </el-row>
@@ -57,9 +57,9 @@
   @import '../../assets/styles/userView.css';
   
   #bottom {
-    margin-top: 10px;
     bottom: 10px;
-    margin-left: calc(18vw + 4px);
+    position: fixed;
+    left: calc(35vw + 4px);
     width: calc(40vw + 30px);
   }
   

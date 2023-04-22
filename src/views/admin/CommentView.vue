@@ -35,12 +35,12 @@
   </el-row>
   <div class="basic-box" id="bottom" v-if="!this.empty">
     <el-input v-model="this.reason" placeholder="请输入内容" style="margin-bottom: 20px;"></el-input>
-    <el-row :gutter="1000">
-      <el-col :span="3">
+    <el-row >
+      <el-col :span="22">
         <el-button type="danger" @click="fail">驳回</el-button>
       </el-col>
       <el-row>
-        <el-col :span="3">
+        <el-col :span="2">
           <el-button type="success" @click="pass">通过</el-button>
         </el-col>
       </el-row>
@@ -177,136 +177,4 @@ export default defineComponent({
       }
     }
 });
-
-// export default {
-
-//   // mounted() {
-//   //   this.loading = true;
-//   //   this.$axios.post(this.get_reviewurl)
-//   //     .then(res => {
-//   //       this.loading = false;
-//   //       console.log(res)
-//   //       for (var i = 0; i < res.data.length; i++) {
-//   //         var item = res.data[i]
-//   //         this.review_list.push(item)
-//   //         // console.log(item)
-//   //       }
-//   //       if (res.data.length == 0) {
-//   //         this.empty = true;
-//   //       } else {
-//   //         this.empty = false;
-//   //       }
-//   //     })
-//   //     .catch(res => {
-//   //       this.loading = false;
-//   //       console.log(res)
-//   //       for (var i = 0; i < res.data.length; i++) {
-//   //         var item = res.data[i]
-//   //         this.review_list.push(item)
-//   //         // console.log(item)
-//   //       }
-//   //       if (res.data.length == 0) {
-//   //         this.empty = true;
-//   //       } else {
-//   //         this.empty = false;
-//   //       }
-//   //       // console.log(res)
-//   //       // this.warning = '获取评论失败';
-//   //       // this.error = true;
-//   //     })
-//   // },
-//   // data() {
-//   //   return {
-//   //     error: false,
-//   //     warning: '',
-//   //     loading: false,
-//   //     reason: '',
-//   //     review_list: [
-//   //     ],
-//   //     content: "abc",
-//   //     review_id: -1,
-//   //     empty: false,
-//   //     review_date: '2022-12-19 10:43:13',
-//   //     review_status: '未知',
-//   //     user_name: '',
-//   //     get_reviewurl: 'http://database.vip.cpolar.cn/admin_page/get_review',
-//   //     check_reviewurl: 'http://database.vip.cpolar.cn/admin_page/check_review',
-//   //     review_index: -1,
-//   //     pr_name: 'a',
-//   //     pr_id: 0,
-//   //   }
-//   // },
-//   // methods: {
-//   //   init() {
-//   //     this.review_index = 0
-//   //     this.review_id = this.review_list[0].review_id;
-//   //     this.content = this.review_list[0].content;
-//   //     this.review_date = this.review_list[0].review_date;
-//   //     this.review_status = this.review_list[0].review_status;
-//   //     this.user_name = this.review_list[0].user_name;
-//   //     this.pr_id = this.review_list[0].pr_id;
-//   //     this.pr_name = this.review_list[0].pr_name;
-//   //   },
-//   //   jump: function (index) {
-//   //     this.review_index = index
-//   //     this.review_id = this.review_list[index].review_id;
-//   //     this.content = this.review_list[index].content;
-//   //     this.review_date = this.review_list[index].review_date;
-//   //     this.review_status = this.review_list[index].review_status;
-//   //     this.user_name = this.review_list[index].user_name;
-//   //     this.pr_id = this.review_list[index].pr_id;
-//   //     this.pr_name = this.review_list[index].pr_name;
-//   //   },
-//   //   pass() {
-//   //     this.loading = true
-//   //     this.$axios.post(this.check_reviewurl, null,
-//   //       {
-//   //         params: {
-//   //           pr_id: this.pr_id,
-//   //           review_id: this.review_id,
-//   //           pass_status: '通过',
-//   //           reason: this.reason
-//   //         }
-//   //       })
-//   //       .then(res => {
-//   //         this.loading = false
-//   //         this.reason = ''
-//   //         console.log(res)
-//   //         this.review_list.splice(this.review_index, 1);
-//   //         this.review_index = 0;
-//   //         this.init()
-//   //       })
-//   //       .catch(err => {
-//   //         console.error(err);
-//   //         this.loading = false
-//   //       })
-
-//   //   },
-//   //   fail() {
-//   //     this.loading = true
-//   //     this.review_list.splice(this.review_index, 1);
-//   //     this.$axios.post(this.check_reviewurl, null,
-//   //       {
-//   //         params: {
-//   //           pr_id: this.pr_id,
-//   //           review_id: this.review_id,
-//   //           pass_status: '不通过',
-//   //           reason: this.reason
-//   //         }
-//   //       })
-//   //       .then(res => {
-//   //         console.log(res)
-//   //         this.review_list.splice(this.review_index, 1);
-//   //         this.review_index = 0;
-//   //         this.init()
-//   //         this.loading = false
-//   //         this.reason = ''
-//   //       })
-//   //       .catch(err => {
-//   //         console.error(err);
-//   //         this.loading = false
-//   //       })
-//   //   }
-//   // }
-// };
 </script>

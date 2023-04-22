@@ -7,7 +7,7 @@
                     <el-input v-model="context" class="w-50 m-2" placeholder="搜索档案" />
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="primary" icon="Search">搜索  </el-button>
+                    <el-button type="primary" :icon="Search" @click="search">搜索  </el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="primary" icon="Search" @click="add">新增档案</el-button>
@@ -138,11 +138,11 @@ import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
 import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
+import { Search} from '@element-plus/icons-vue'
 
 
 const loading = ref(false)
 const { cookies } = useCookies();
-
 export default defineComponent({
     components: {
         UploadOutlined,
@@ -179,6 +179,7 @@ export default defineComponent({
         const intro = ref('')
         const name = ref('')
         const adopted = ref(false)
+        const currentPage = ref(1)
         let formData = new window.FormData();
         Axios.post('/api/admin/animal/get', {
             "pageNum": 20,
@@ -220,7 +221,8 @@ export default defineComponent({
             context,
             lastImage,
             id,
-            dialogVisible1
+            dialogVisible1,
+            currentPage,
         }
     },
     methods: {
@@ -262,7 +264,7 @@ export default defineComponent({
             this.loading = true
             Axios.post('/api/admin/animal/get', {
                 "pageNum": 20,
-                "page": 0,
+                "page": 1,
                 "context": this.context
             }, {headers}
             ).then((response) =>{
@@ -304,7 +306,7 @@ export default defineComponent({
             this.loading = true
             Axios.post('/api/admin/animal/get', {
                 "pageNum": 20,
-                "page": 0,
+                "page": 1,
                 "context": this.context
             }, {headers}
             ).then((response) =>{
@@ -327,9 +329,35 @@ export default defineComponent({
         },
         handleCurrentChange(index) {
             this.loading = true
+            this.currentPage = index
             Axios.post('/api/admin/animal/get', {
                 "pageNum": 20,
                 "page": index,
+                "context": this.context
+            }, {headers}
+            ).then((response) =>{
+                this.tableData.list = []
+                for (var i = 0; i < response.data.body.records.length; i++) {
+                    var item = response.data.body.records[i]
+                    if(item.adopted == true) {
+                        item['status'] = '已领养'
+                    } else {
+                        item['status'] = '未领养'
+                    }
+                    tableData.list.push(item)
+            }
+            totalNum.value = response.data.body.sumNum
+            this.loading = false
+            })
+            .catch((response) => {
+                ElMessage.error('网络错误')
+            })
+        },
+        search() {
+            this.loading = true
+            Axios.post('/api/admin/animal/get', {
+                "pageNum": 20,
+                "page": 1,
                 "context": this.context
             }, {headers}
             ).then((response) =>{

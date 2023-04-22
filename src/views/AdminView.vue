@@ -30,12 +30,10 @@
                                 </el-icon>
                                 <span>审核领养</span>
                             </el-menu-item>
-                            <el-menu-item index="5" @click="response">
-                                <el-icon>
-                                    <ChatLineRound />
-                                </el-icon>
-                                <span>求助回应</span>
-                            </el-menu-item>
+                            <el-menu-item-group title="求助管理">
+                                <el-menu-item index="5-1" @click="response1">求助审核</el-menu-item>
+                                <el-menu-item index="5-2" @click="response2">求助回应</el-menu-item>
+                            </el-menu-item-group>
                             <el-menu-item index="6" @click="users">
                                 <el-icon>
                                     <User />
@@ -78,8 +76,12 @@ export default defineComponent({
             router.push('/admin/comment')
             activePath = router.currentRoute.value.path
         };
-        const response = () => {
-            router.push('/admin/response')
+        const response1 = () => {
+            router.push({path:'/admin/response', params:{index: 1}})
+            activePath = router.currentRoute.value.path
+        };
+        const response2 = () => {
+            router.push({path:'/admin/response', params:{index: 2}})
             activePath = router.currentRoute.value.path
         };
         const adopt = () => {
@@ -103,8 +105,9 @@ export default defineComponent({
             tweet,
             users,
             adopt,
-            response,
-            comment
+            response1,
+            comment,
+            response2
         }
     }
 })

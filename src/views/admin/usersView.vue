@@ -10,7 +10,7 @@
                     <el-input v-model="search_content" class="w-50 m-2" placeholder="搜索用户" />
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="primary" icon="Search">搜索</el-button>
+                    <el-button type="primary" :icon="Search">搜索</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -52,7 +52,7 @@
 import { defineComponent, onMounted, ref, reactive } from 'vue';
 import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
-import {useRouter} from 'vue-router'
+import { Search} from '@element-plus/icons-vue'
 
 const loading = ref(false)
 export default defineComponent({

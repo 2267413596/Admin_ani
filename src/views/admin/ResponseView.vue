@@ -9,10 +9,10 @@
                         <el-option label="待解决求助" value=2 />
                     </el-select>
                 <el-col :span="5">
-                    <el-input v-model="search_content" class="w-50 m-2" placeholder="搜索求助" />
+                    <el-input v-model="context" class="w-50 m-2" placeholder="搜索求助" />
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="primary" icon="Search">搜索</el-button>
+                    <el-button type="primary" :icon="Search">搜索</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -25,8 +25,11 @@
                 <el-table-column prop="status" label="状态" width="100" />
                 <el-table-column fixed="right" label="Operations">
                     <template #default="scope">
-                        <el-button link type="primary" size="small" @click.prevent="deleteRow(scope.$index)">
-                            回应
+                        <el-button link type="primary" size="small" v-if="isPass == 1" @click.prevent="reply(scope.$index)">
+                            查看
+                        </el-button>
+                        <el-button link type="primary" size="small" v-if="isPass == 0" @click.prevent="check(scope.$index)">
+                            审核
                         </el-button>
                     </template>
                 </el-table-column>
@@ -49,10 +52,11 @@
 <script>
 import { defineComponent, onMounted, ref, reactive } from 'vue';
 import Axios from 'axios';
+import { Search} from '@element-plus/icons-vue'
 import { useCookies } from "vue3-cookies";
 import {useRouter} from 'vue-router'
 
-const loading = ref(false)
+
 export default defineComponent({
     
     beforeCreate() {
@@ -60,58 +64,117 @@ export default defineComponent({
         .setAttribute('style', 'margin: 0')
     },
     setup() {
+        const router = useRouter();
         let tableData = reactive({list:[
-            {
-                id: 1,
-                username: 'test',
-                title: '动物失踪',
-                status: '已解决'
-            },
-            {
-                id: 2,
-                username: '123',
-                title: '被猫猫抓伤了怎么办',
-                status: '待解决'
-            }
         ]})
         let formData = new window.FormData();
         const { cookies } = useCookies();
-        const select = ref('')
+        const select = ref('筛选求助')
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': cookies.get('myCookie'),
         }
-        // Axios.post('/api/admin/user/get', {
-        //     "pageNum": 20,
-	    //     "page": 1,
-	    //     "context": "",
-	    //     "isBlack": false,
-        // }, {headers}
-        // ).then((response) =>{
-        //     console.log(response)
-        //     for (var i = 0; i < response.data.body.users.length; i++) {
-        //         var item = response.data.body.users[i]
-        //         if(item.isBlack == true) {
-        //             item['status'] = '已拉黑'
-        //         } else {
-        //             item['status'] = '正常'
-        //         }
-        //         tableData.list.push(item)
-        //     }
-        //     console.log(tableData.list)
-        // })
-        // .catch((response) => {
-        //     alert('网络错误');
-        //     console.log(response);
-        // })
+        const context = ref('')
+        const loading = ref(true)
+        const isPass = ref(0)
+        const currentPage = ref(1)
+        if(router.params.index == 0) {  //审核求助
+            Axios.post('/api/admin/help/get', {
+                "pageNum": 20,
+                "page": 1,
+                "context": "",
+                "isPass": isPass.value
+            }, {headers}
+            ).then((response) =>{
+                console.log(response)
+                for (var i = 0; i < response.data.body.helps.length; i++) {
+                    var item = response.data.body.helps[i]
+                    tableData.list.push(item)
+                }
+                console.log(tableData.list)
+            })
+            .catch((response) => {
+                alert('网络错误');
+                console.log(response);
+            })
+        } else {    //求助管理
+            isPass.value = 3
+            Axios.post('/api/admin/help/get', {
+                "pageNum": 20,
+                "page": 1,
+                "context": "",
+                "isPass": isPass.value
+            }, {headers}
+            ).then((response) =>{
+                console.log(response)
+                for (var i = 0; i < response.data.body.helps.length; i++) {
+                    var item = response.data.body.helps[i]
+                    tableData.list.push(item)
+                }
+                console.log(tableData.list)
+            })
+            .catch((response) => {
+                alert('网络错误');
+                console.log(response);
+            })
+        }
+        loading = false
         return {
             formData,
             cookies,
             headers,
             loading,
             tableData,
-            select
+            select,
+            context,
+            isPass,
+            currentPage
         }
     },
+    methods: {
+        search() {
+            this.loading = true
+            Axios.post('/api/admin/help/get', {
+                "pageNum": 20,
+                "page": 1,
+                "context": this.context,
+                "isPass": this.isPass
+            }, {headers}
+            ).then((response) =>{
+                this.tableData.list = []
+                for (var i = 0; i < response.data.body.helps.length; i++) {
+                    var item = response.data.body.helps[i]
+                    tableData.list.push(item)
+            }
+                totalNum.value = response.data.body.sumNum
+            })
+            .catch((response) => {
+                ElMessage.error('网络错误')
+            })
+            this.loading = false
+        },
+        handleCurrentChange(index) {
+            this.loading = true
+            this.currentPage = index
+            Axios.post('/api/admin/help/get', {
+                "pageNum": 20,
+                "page": index,
+                "context": this.context
+            }, {headers}
+            ).then((response) =>{
+                this.tableData.list = []
+                for (var i = 0; i < response.data.body.helps.length; i++) {
+                    var item = response.data.body.helps[i]
+                    tableData.list.push(item)
+                }
+                totalNum.value = response.data.body.sumNum
+                }
+            )
+            .catch((response) => {
+                ElMessage.error('网络错误')
+            })
+            this.loading = false
+        }
+    }
 })
 </script>
