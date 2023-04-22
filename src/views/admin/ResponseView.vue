@@ -37,6 +37,64 @@
             <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage"
                 layout="total, prev, pager, next" :total="2">
             </el-pagination>
+                <el-dialog
+                v-model="dialogVisible1"
+                title="审核求助"
+                width="50%"
+                :before-close="handleClose"
+                >
+                <el-form :model="form" label-width="120px">
+                    <el-form-item label="基本信息">
+                        <span>标题{{  }}</span>
+                        <span>用户{{  }}</span>
+                        <span>日期{{  }}</span>
+                    </el-form-item>
+                    <el-form-item label="求助内容">
+                        <span>{{  }}</span>
+                    </el-form-item>
+                    </el-form>
+                <template #footer>
+                    <span class="dialog-footer">
+                    <el-input v-model="reply"/>
+                    <el-button @click="dialogVisible1 = false">驳回</el-button>
+                    <el-button type="primary" @click="confirm1">
+                        通过
+                    </el-button>
+                    </span>
+                </template>
+            </el-dialog>
+            <el-dialog
+                v-model="dialogVisible2"
+                title="求助回应"
+                width="50%"
+                :before-close="handleClose"
+                >
+                <el-form :model="form" label-width="120px">
+                    <el-form-item label="基本信息">
+                        <span>标题{{  }}</span>
+                        <span>用户{{  }}</span>
+                        <span>日期{{  }}</span>
+                    </el-form-item>
+                    <el-form-item label="求助状态">
+                        <el-select v-model="solved">
+                            <el-option label="已解决" value=true />
+                            <el-option label="未解决" value=false />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="求助内容">
+                        <span>{{  }}</span>
+                    </el-form-item>
+                    </el-form>
+                <template #footer>
+                    <span class="dialog-footer">
+                    <el-input v-model="reply"/>
+                    <el-button @click="dialogVisible1 = false">取消</el-button>
+                    <el-button type="primary" @click="confirm1">
+                        回复
+                    </el-button>
+                    </span>
+                </template>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -78,7 +136,7 @@ export default defineComponent({
         const loading = ref(true)
         const isPass = ref(0)
         const currentPage = ref(1)
-        if(router.params.index == 0) {  //审核求助
+        if(router.currentRoute.value.query == 0) {  //审核求助
             Axios.post('/api/admin/help/get', {
                 "pageNum": 20,
                 "page": 1,
@@ -118,7 +176,7 @@ export default defineComponent({
                 console.log(response);
             })
         }
-        loading = false
+        loading.value = false
         return {
             formData,
             cookies,

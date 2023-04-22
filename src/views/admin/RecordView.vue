@@ -99,10 +99,10 @@
                         :headers="headers"
                         @change="handleChange"
                     >
-                        <a-button>
+                        <el-button>
                         <upload-outlined></upload-outlined>
                         Click to Upload
-                        </a-button>
+                        </el-button>
                     </a-upload>
                 </el-form-item>
                 <el-form-item label="领养状态">
@@ -138,7 +138,7 @@ import Axios from 'axios';
 import { useCookies } from "vue3-cookies";
 import { message } from 'ant-design-vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
-import { Search} from '@element-plus/icons-vue'
+import { Search} from '@element-plus/icons-vue';
 
 
 const loading = ref(false)

@@ -10,7 +10,7 @@ import  VueCookies  from 'vue3-cookies';
 import "./assets/styles/scrollbar.css";
 import "./assets/styles/global.css";
 import "./assets/styles/userView.css";
-import Antd from 'ant-design-vue';
+import {Upload} from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
 
@@ -23,7 +23,7 @@ app.use(router)
 app.use(ElementPlus)
 // Vue.prototype.$cookies = VueCookies;
 app.use(VueCookies);
-app.use(Antd)
+app.use(Upload)
 
 // Or to set default config:
 
