@@ -55,7 +55,7 @@
         style="margin-bottom: 20px"
       ></el-input>
       <el-row>
-        <el-col :span="22">
+        <el-col :span="20">
           <el-button type="danger" @click="fail">驳回</el-button>
         </el-col>
         <el-col :span="2">

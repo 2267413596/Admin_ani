@@ -25,7 +25,7 @@
                 <el-table-column prop="status" label="状态" width="100" />
                 <el-table-column fixed="right" label="Operations">
                     <template #default="scope">
-                        <el-button link type="primary" size="small" v-if="isPass == 1" @click.prevent="reply(scope.$index)">
+                        <el-button link type="primary" size="small" v-if="tableData.list[scope.$index-1].censored == 0" @click.prevent="reply(scope.$index)">
                             查看
                         </el-button>
                         <el-button link type="primary" size="small" v-if="isPass == 0" @click.prevent="check(scope.$index)">
@@ -34,7 +34,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage"
+            <el-pagination @current-change="handleCurrentChange" 
                 layout="total, prev, pager, next" :total="2">
             </el-pagination>
                 <el-dialog
@@ -136,12 +136,13 @@ export default defineComponent({
         const loading = ref(true)
         const isPass = ref(0)
         const currentPage = ref(1)
-        if(router.currentRoute.value.query == 0) {  //审核求助
+        if(router.currentRoute.value.query == 1) {  //审核求助
             Axios.post('/api/admin/help/get', {
                 "pageNum": 20,
-                "page": 1,
+                "page": 0,
                 "context": "",
-                "isPass": isPass.value
+                "censored": 0,
+                "solved": false 
             }, {headers}
             ).then((response) =>{
                 console.log(response)
@@ -159,9 +160,10 @@ export default defineComponent({
             isPass.value = 3
             Axios.post('/api/admin/help/get', {
                 "pageNum": 20,
-                "page": 1,
+                "page": 0,
                 "context": "",
-                "isPass": isPass.value
+                "censored": 1,
+                "solved": false 
             }, {headers}
             ).then((response) =>{
                 console.log(response)

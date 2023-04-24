@@ -68,10 +68,10 @@ export default defineComponent({
             router.push('/admin/comment')
         };
         const response1 = () => {
-            router.push({path:'/admin/response', query:{index: 1}})
+            router.replace({path:'/admin/response', query:{index: 1}})
         };
         const response2 = () => {
-            router.push({path:'/admin/response', query:{index: 2}})
+            router.replace({path:'/admin/response', query:{index: 2}})
         };
         const adopt = () => {
             router.push('/admin/adopt')

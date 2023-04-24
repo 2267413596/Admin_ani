@@ -2,14 +2,14 @@
   <div id="root">
     <!-- 搜索框 -->
     <div class="basic-box" style="margin: 20px">
-      <el-row :gutter="20">
-        <el-col :span="3" :offset="2">
-          <el-checkbox v-model="checked1" label="显示拉黑用户" size="large" />
+      <el-row >
+        <el-col :span="4" :offset="2">
+          <el-checkbox v-model="checked1" label="只显示拉黑用户" size="large" />
         </el-col>
-        <el-col :span="5">
+        <el-col :span="4">
           <el-input v-model="context" class="w-50 m-2" placeholder="搜索用户" />
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" :offset="1">
           <el-button type="primary" @click="search">搜索</el-button>
         </el-col>
       </el-row>
