@@ -12,7 +12,7 @@
                     <el-input v-model="context" class="w-50 m-2" placeholder="搜索求助" />
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="primary" :icon="Search">搜索</el-button>
+                    <el-button type="primary" :icon="Search" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
         </div>

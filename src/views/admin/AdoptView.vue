@@ -19,7 +19,7 @@
               <span>用户：{{ this.username }}</span>
             </el-col>
             <el-col :span="8">
-              <span>日期：2023-04-18</span>
+              <span>日期：{{this.date}}</span>
             </el-col>
           </el-row>
         </div>
@@ -172,6 +172,36 @@ export default defineComponent({
                 this.count += 1
             }
             console.log(count.value)
+        },
+        pass() {
+          Axios.post('/api/admin/tweet/censor/', {
+            "tweetId": this.idC,
+            "operate": 0,
+            "reason": ""
+          }, headers)
+          .then((response) =>{
+              Message(response.data.body.message);
+          })
+          .catch((response) => {
+              Message('网络错误');
+              console.log(response);
+          })
+          this.router.go(0)
+        },
+        fail() {
+          Axios.post('/api/admin/tweet/censor/', {
+            "tweetId": this.idC,
+            "operate": 1,
+            "reason": this.reason
+          }, headers)
+          .then((response) =>{
+              Message(response.data.body.message);
+          })
+          .catch((response) => {
+              Message('网络错误');
+              console.log(response);
+          })
+          this.router.go(0)
         }
     }
 })

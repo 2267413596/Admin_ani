@@ -188,6 +188,7 @@ export default defineComponent({
         }, {headers}
         ).then((response) =>{
             console.log(response)
+            if(response.data.body != null) {
             for (var i = 0; i < response.data.body.records.length; i++) {
                 var item = response.data.body.records[i]
                 if(item.adopted == true) {
@@ -198,6 +199,7 @@ export default defineComponent({
                 tableData.list.push(item)
         }
         totalNum.value = response.data.body.sumNum
+        }
         console.log(totalNum)
         })
         .catch((response) => {
