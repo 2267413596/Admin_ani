@@ -83,8 +83,8 @@
         </el-form-item>
         <el-form-item label="领养状态">
           <el-select v-model="adopted">
-            <el-option label="已领养" value="true" />
-            <el-option label="未领养" value="false" />
+            <el-option label="已领养" :value="true" />
+            <el-option label="未领养" :value="false" />
           </el-select>
         </el-form-item>
       </el-form>

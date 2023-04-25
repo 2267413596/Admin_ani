@@ -20,26 +20,32 @@ const router = createRouter({
         {
           path:'/admin/users',
           component:()=>import('../views/admin/UsersView.vue'),
+          name: 6
         },
         {
           path:'/admin/comment',
           component:()=>import('../views/admin/CommentView.vue'),
+          name: 2
         },
         {
           path:'/admin/tweet',
           component:()=>import('../views/admin/TweetView.vue'),
+          name: 1
         },
         {
           path:'/admin/record',
           component:()=>import('../views/admin/RecordView.vue'),
+          name: 3
         },
         {
           path:'/admin/adopt',
           component:()=>import('../views/admin/AdoptView.vue'),
+          name: 4
         },
         {
           path:'/admin/response',
           component:()=>import('../views/admin/ResponseView.vue'),
+          name: 5
         },
       ]
     },

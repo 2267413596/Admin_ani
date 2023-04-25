@@ -1,5 +1,12 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { defineComponent, ref , computed} from 'vue';
+import {useRouter} from 'vue-router'
+
+const router=useRouter();
+const routerKey = computed(() => {
+  return router.path + Math.random()
+})
 </script>
 
 <template>
@@ -15,5 +22,5 @@ import { RouterLink, RouterView } from 'vue-router'
       </nav>
     </div>
   </header> -->
-  <RouterView />
+  <RouterView :key="routerKey"></RouterView>
 </template>

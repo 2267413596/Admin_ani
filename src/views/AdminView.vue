@@ -9,8 +9,8 @@
                     <el-scrollbar>
                     <el-aside :width="'180px'">
                         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                            text-color="#fff" default-active="1" vue-router="true">
-                            <el-menu-item index="1" @click="tweet">
+                            text-color="#fff" :default-active="active" vue-router="true" >
+                            <el-menu-item index="1" @click="tweet"> 
                                 <span>帖子审核</span>
                             </el-menu-item>
                             <el-menu-item index="2" @click="comment">
@@ -22,13 +22,9 @@
                             <el-menu-item index="4" @click="adopt">
                                 <span>审核领养</span>
                             </el-menu-item>
-                            <el-sub-menu index="5">
-                                <template #title>
-                                    <span>求助管理</span>
-                                </template>
-                                <el-menu-item index="5-1" @click="response1">求助审核</el-menu-item>
-                                <el-menu-item index="5-2" @click="response2">求助回应</el-menu-item>
-                            </el-sub-menu>
+                            <el-menu-item index="5" @click="response">
+                                <span>求助管理</span>
+                            </el-menu-item>
                             <el-menu-item index="6" @click="users">
                                 <span>用户管理</span>
                             </el-menu-item>
@@ -36,7 +32,7 @@
                     </el-aside>
                 </el-scrollbar>
                     <el-main class="main">
-                        <router-view/>
+                        <router-view :key="routerKey"></router-view>
                     </el-main>
                 </el-container>
             </div>
@@ -50,12 +46,12 @@
 
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref , computed} from 'vue';
 import Axios from 'axios';
-import { useCookies } from "vue3-cookies";
+import { useCookies } from "vue3-cookies"; 
 import {useRouter} from 'vue-router'
 
-const activePath = ref('/admin/tweet')
+const router=useRouter();
 export default defineComponent({
     beforeCreate() {
         document.querySelector('body')
@@ -63,36 +59,44 @@ export default defineComponent({
     },
     setup() {
         const router=useRouter();
+        const active = ref(router.currentRoute.value.name)
         const { cookies } = useCookies();
         const comment = () => {
-            router.push('/admin/comment')
+            active.value = "2"
+            router.replace('/admin/comment')
+            
         };
-        const response1 = () => {
-            router.replace({path:'/admin/response', query:{index: 1}})
-        };
-        const response2 = () => {
-            router.replace({path:'/admin/response', query:{index: 2}})
+        const response = () => {
+            active.value = "5"
+            router.push('/admin/response')
+            
         };
         const adopt = () => {
-            router.push('/admin/adopt')
+            active.value = "4"
+            router.replace('/admin/adopt')
         };
         const users = () => {
-            router.push('/admin/users')
+            active.value = "6"
+            router.replace('/admin/users')
+            
         };
         const tweet = () => {
-            router.push('/admin/tweet')
+            active.value = "1"
+            router.replace('/admin/tweet')
+            
         };
         const record = () => {
-            router.push('/admin/record')
+            active.value = "3"
+            router.replace('/admin/record')
         };
         return {
             record,
             tweet,
             users,
             adopt,
-            response1,
+            response,
             comment,
-            response2
+            active
         }
     }
 })
