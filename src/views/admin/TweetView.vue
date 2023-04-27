@@ -14,8 +14,9 @@
             :key="i"
             class="infinite-list-item"
             @click="handelClick(i)"
+            style="cursor: pointer;"
           >
-            {{ tableData.list[i - 1].username }}
+            {{ tableData.list[i - 1].username }}:...
           </li>
         </ul>
         <div v-if="this.empty" style="margin-left: 50px; top: 30px">
@@ -44,6 +45,9 @@
         <div class="basic-box" id="comment">
           <p style="text-align: center">帖子内容</p>
           <span>{{ this.contentC }}</span>
+          <div class="demo-image__lazy">
+            <el-image v-for="url in urls.list" :key="url" :src="url" lazy />
+          </div>
         </div>
         <div class="basic-box" id="bottom">
           <el-input
@@ -82,7 +86,7 @@
   margin-bottom: 20px;
 }
 .infinite-list {
-  height: 300px;
+  height: 80%;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -98,6 +102,18 @@
 }
 .infinite-list .infinite-list-item + .list-item {
   margin-top: 10px;
+}
+.demo-image__lazy {
+  height: 400px;
+  overflow-y: auto;
+}
+.demo-image__lazy .el-image {
+  display: block;
+  min-height: 200px;
+  margin-bottom: 10px;
+}
+.demo-image__lazy .el-image:last-child {
+  margin-bottom: 0;
 }
 </style>
   
@@ -118,6 +134,7 @@ const headers = {
 const max = ref(0);
 export default defineComponent({
   setup() {
+    let urls = reactive({ list: [] });
     var titleC = ref("");
     var userC = ref(0);
     var reason = ref("");
@@ -192,7 +209,8 @@ export default defineComponent({
       reason,
       router,
       page,
-      count
+      count,
+      urls
     };
   },
   methods: {
@@ -213,7 +231,7 @@ export default defineComponent({
           if (response.data.body.tweets != null) {
             for (var i = 0; i < response.data.body.tweets.length; i++) {
               var item = response.data.body.tweets[i];
-              tableData.list.push(item);
+              this.tableData.list.push(item);
             }
           }
           this.count = this.tableData.list.length;
@@ -240,10 +258,18 @@ export default defineComponent({
           )
             .then((response) => {
               console.log(response);
+              this.urls
               this.titleC = response.data.body.title;
               this.dateC = response.data.body.time
               this.contentC = response.data.body.content;
               this.userC = response.data.body.username;
+              if (response.data.body.images != null) {
+                for (var i = 0; i < response.data.body.images.length; i++) {
+                  var item = response.data.body.images[i];
+                  this.urls.list.push('/api' + item)
+                }
+                console.log(this.urls.list)
+              }
             })
             .catch((response) => {
               ElMessage("网络错误");

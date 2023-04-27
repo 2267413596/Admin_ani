@@ -17,8 +17,9 @@
             :key="i"
             class="infinite-list-item"
             @click="handelClick(i)"
+            style="cursor: pointer;"
           >
-            {{ this.tableData.list[i - 1].username }}
+            {{ this.tableData.list[i - 1].username }}:...
           </li>
         </ul>
       </el-col>

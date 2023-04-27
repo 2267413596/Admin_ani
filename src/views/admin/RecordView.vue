@@ -265,13 +265,13 @@ export default defineComponent({
     confirm() {
       //修改
       Axios.post(
-        "api/admin/animal/modify/",
+        "/api/admin/animal/modify/",
         {
           recordId: this.id,
           name: this.name,
           intro: this.intro,
           adopted: this.adopted,
-          imageId: this.lastImage,
+          avatar: this.lastImage
         },
         { headers }
       )
@@ -321,10 +321,11 @@ export default defineComponent({
       Axios.post(
         "/api/admin/animal/addrecord",
         {
+          recordId: this.id,
           name: this.name,
           intro: this.intro,
           adopted: this.adopted,
-          imageId: this.lastImage,
+          avatar: this.lastImage
         },
         { headers }
       )
@@ -435,9 +436,9 @@ export default defineComponent({
       let params = new window.FormData();
       params.append("image", options.file);
       params.append("type", "animal");
-      Axios.post("/api/picture/upload", params, config)
+      Axios.post("/api/image/upload", params, config)
         .then((response) => {
-          console.log(response);
+          this.lastImage = response.data.body.imagePath
         })
         .catch((response) => {
           console.log(response);

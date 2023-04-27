@@ -72,7 +72,6 @@
         :total="totalNum"
       >
       </el-pagination>
-      // 审核求助对话框
       <el-dialog  
         v-model="dialogVisible1"
         title="审核求助"
@@ -82,13 +81,13 @@
         <el-form :model="form" label-width="120px">
           <el-form-item label="基本信息">
             <el-row>
-              <el-col span="6">
+              <el-col :span="6">
                 <span>标题{{ titleC }}</span>
               </el-col>
-              <el-col span="6">
+              <el-col :span="6">
                 <span>用户{{ userC }}</span>
               </el-col>
-              <el-col span="12">
+              <el-col :span="12">
                 <span>日期{{ dateC }}</span>
               </el-col>
             </el-row>
@@ -105,7 +104,6 @@
           </span>
         </template>
       </el-dialog>
-      // 回应求助对话框
       <el-dialog
         v-model="dialogVisible2"
         title="求助回应"
@@ -114,21 +112,25 @@
       >
         <el-form :model="form" label-width="120px">
           <el-form-item label="基本信息">
-            <el-col span="6">
+            <el-col :span="6">
                 <span>标题{{ titleC }}</span>
               </el-col>
-              <el-col span="6">
+              <el-col :span="6">
                 <span>用户{{ userC }}</span>
               </el-col>
-              <el-col span="12">
+              <el-col :span="12">
                 <span>日期{{ dateC }}</span>
               </el-col>
           </el-form-item>
           <el-form-item label="求助状态">
-            <el-select v-model="solve">
-              <el-option label="已解决" :value="true" />
-              <el-option label="未解决" :value="false" />
-            </el-select>
+            <el-switch
+              v-model="solve"
+              class="ml-2"
+              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+              @click="changeStatus"
+            />
+            <span v-if="solve">已解决</span>
+            <span v-if="!solve">未解决</span>
           </el-form-item>
           <el-form-item label="求助内容">
             <span>{{ contentC }}</span>
@@ -192,6 +194,7 @@ export default defineComponent({
     var response = ref('');
     const dialogVisible1 = ref(false);
     const dialogVisible2 = ref(false);
+    const index = ref(0)
     //审核求助
     console.log("aaa");
     Axios.post(
@@ -242,7 +245,8 @@ export default defineComponent({
       totalNum,
       empty,
       solve,
-      response
+      response,
+      index
     };
   },
   methods: {
@@ -390,6 +394,7 @@ export default defineComponent({
         });
     },
     check(index) {
+      this.index = index
       this.idC = this.tableData.list[index].id
       this.dialogVisible1 = true
       Axios.post(
@@ -411,7 +416,9 @@ export default defineComponent({
         });
     },
     reply(index) {
+      this.index = index
       this.idC = this.tableData.list[index].id
+      this.solve = this.tableData.list[index].solved
       this.dialogVisible2 = true
       Axios.post(
         "/api/admin/help/content/",
@@ -425,6 +432,23 @@ export default defineComponent({
           this.dateC = response.data.body.time
           this.contentC = response.data.body.content
           this.userC = response.data.body.username
+        })
+        .catch((response) => {
+          ElMessage("网络错误");
+          console.log(response);
+        });
+    },
+    changeStatus() {
+      Axios.post(
+        "/api/admin/help/changeStatus/",
+        {
+          tweetId: this.idC,
+        },
+        { headers }
+      )
+        .then((response) => {
+          ElMessage(response.data.message);
+          this.tableData.list[this.index].status = solve ? '已解决' : '待解决'
         })
         .catch((response) => {
           ElMessage("网络错误");

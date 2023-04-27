@@ -14,8 +14,9 @@
             :key="i"
             class="infinite-list-item"
             @click="handelClick(i)"
+            style="cursor: pointer;"
           >
-            {{ tableData.list[i - 1].username }}
+            {{ tableData.list[i - 1].username }}:...
           </li>
         </ul>
         <div v-if="this.empty" style="margin-left: 50px; top: 30px">
