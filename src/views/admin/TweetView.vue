@@ -185,6 +185,7 @@ export default defineComponent({
               dateC.value = response.data.body.time
               contentC.value = response.data.body.content;
               userC.value = tableData.list[0].username;
+              idC.value = tableData.list[0].id;
             })
             .catch((response) => {
               ElMessage("网络错误");

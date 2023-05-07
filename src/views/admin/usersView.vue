@@ -118,6 +118,7 @@ export default defineComponent({
             }
             tableData.list.push(item);
           }
+        totalNum.value = response.data.body.sumNum;
         }
         console.log(tableData.list);
       })

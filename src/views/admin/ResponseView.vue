@@ -339,7 +339,7 @@ export default defineComponent({
             ElMessage("Success!");
           }
           setTimeout(1000);
-          this.router.go(0);
+          this.$router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");
@@ -351,7 +351,7 @@ export default defineComponent({
         "/api/admin/tweet/censor/",
         {
           tweetId: this.idC,
-          operate: 0,
+          operate: 1,
           reason: this.reason
         },
         { headers }

@@ -17,11 +17,15 @@
       </el-row>
     </div>
     <!-- 表格 -->
-    <div id="table" class="basic-box" style="margin: 20px">
+    <div
+      id="table"
+      class="basic-box"
+      style="margin: 20px; margin-bottom: -10px"
+    >
       <el-table
         :data="tableData.list"
         style="width: 100%"
-        max-height="250"
+        max-height="62vh"
         v-loading="loading"
       >
         <el-table-column prop="id" label="动物id" width="200" />
@@ -52,15 +56,12 @@
         @current-change="handleCurrentChange"
         layout="total, prev, pager, next"
         :total="totalNum"
+        :default-page-size="20"
       >
       </el-pagination>
     </div>
-    <el-dialog
-      v-model="dialogVisible"
-      title="编辑档案"
-      width="50%"
-      :before-close="handleClose"
-    >
+    <el-dialog v-model="dialogVisible" title="编辑档案" 
+    width="50%" :before-close="handleClose">
       <el-form :model="form" label-width="120px">
         <el-form-item label="动物名称">
           <el-input v-model="name" />
@@ -70,16 +71,43 @@
         </el-form-item>
         <el-form-item label="动物图片">
           <a-upload
+          list-type="picture-card"
+          v-model:file-list="fileList"
+          @preview="handlePreview"
+          :customRequest="customRequest"
+        >
+          <div v-if="fileList.length < 1">
+            <plus-outlined />
+            <div class="ant-upload-text">Upload</div>
+          </div>
+        </a-upload>
+        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+          <img alt="example" style="width: 100%" :src="previewImage" />
+        </a-modal>
+          <!-- <el-image :src="url" />
+          <a-upload
+            :customRequest="customRequest"
+            @change="handleChange"
+            list-type="picture"
+            v-model:file-list="fileList"
+            class="upload-list-inline"
+          >
+            <el-button>
+              <upload-outlined></upload-outlined>
+              上传/修改图片
+            </el-button>
+          </a-upload> -->
+          <!-- <a-upload
             v-model:file-list="fileList"
             name="file"
             :customRequest="customRequest"
             @change="handleChange"
           >
-            <a-button>
+          <el-button>
               <upload-outlined></upload-outlined>
               Click to Upload
-            </a-button>
-          </a-upload>
+            </el-button>
+          </a-upload> -->
         </el-form-item>
         <el-form-item label="领养状态">
           <el-select v-model="adopted">
@@ -95,12 +123,7 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog
-      v-model="dialogVisible1"
-      title="编辑档案"
-      width="50%"
-      :before-close="handleClose"
-    >
+    <el-dialog v-model="dialogVisible1" title="新增" width="50%">
       <el-form :model="form" label-width="120px">
         <el-form-item label="动物名称">
           <el-input v-model="name" />
@@ -144,6 +167,26 @@
 #search {
   background-color: aquamarine;
 }
+.upload-list-inline :deep(.ant-upload-list-item) {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+.upload-list-inline :deep(.ant-upload-animate-enter) {
+  animation-name: uploadAnimateInlineIn;
+}
+.upload-list-inline :deep(.ant-upload-animate-leave) {
+  animation-name: uploadAnimateInlineOut;
+}
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
 </style>
 
 <script>
@@ -151,7 +194,7 @@ import { defineComponent, onMounted, ref, reactive } from "vue";
 import Axios from "axios";
 import { useCookies } from "vue3-cookies";
 import { message } from "ant-design-vue";
-import { UploadOutlined } from "@ant-design/icons-vue";
+import { UploadOutlined, PlusOutlined  } from "@ant-design/icons-vue";
 import { Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
@@ -167,9 +210,18 @@ const config = {
     Authorization: cookies.get("myCookie"),
   },
 };
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 export default defineComponent({
   components: {
     UploadOutlined,
+    PlusOutlined
   },
   beforeCreate() {
     document.querySelector("body").setAttribute("style", "margin: 0");
@@ -180,19 +232,20 @@ export default defineComponent({
     const id = ref(0);
     const loading = ref(false);
     const totalNum = ref(0);
-    const handleChange = (info) => {
-      console.log(info);
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+    const handleCancel = () => {
+      previewVisible.value = false;
+    };
+    const handlePreview = async file => {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
       }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-        lastImage.value = info.response;
-        console.log("aaa");
-        console.log(info);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+      previewImage.value = file.url || file.preview;
+      previewVisible.value = true;
+    };
+    const handleChange = ({ fileList: newFileList }) => {
+      console.log('aaa')
+      console.log(newFileList)
+      fileList.value = newFileList;
     };
     const fileList = ref([]);
     const dialogVisible = ref(false);
@@ -202,6 +255,8 @@ export default defineComponent({
     const name = ref("");
     const adopted = ref(false);
     const currentPage = ref(1);
+    loading.value = true;
+    const url = ref('')
     Axios.post(
       "/api/admin/animal/get/",
       {
@@ -225,12 +280,14 @@ export default defineComponent({
           }
           totalNum.value = response.data.body.sumNum;
         }
-        console.log(totalNum);
       })
       .catch((response) => {
         alert("网络错误");
         console.log(response);
       });
+    loading.value = false;
+    const previewVisible = ref(false);
+    const previewImage = ref('');
     return {
       cookies,
       tableData,
@@ -246,6 +303,12 @@ export default defineComponent({
       id,
       dialogVisible1,
       currentPage,
+      loading,
+      url,
+      handleCancel,
+      handlePreview,
+      previewVisible,
+      previewImage
     };
   },
   methods: {
@@ -254,12 +317,22 @@ export default defineComponent({
       this.name = this.tableData.list[index].name;
       this.adopted = this.tableData.list[index].adopted;
       this.id = this.tableData.list[index].id;
+      this.url = this.tableData.list[index].avatar;
+      this.fileList = []
+      this.fileList.push({
+        uid: 1,
+        name: 'image.png',
+        status: 'done',
+        url: '/api' + this.url,
+      })
       this.dialogVisible = true;
     },
     add() {
       this.intro = "";
       this.name = "";
       this.adopted = "";
+      this.avatar = '';
+      this.fileList = [];
       this.dialogVisible1 = true;
     },
     confirm() {
@@ -271,21 +344,16 @@ export default defineComponent({
           name: this.name,
           intro: this.intro,
           adopted: this.adopted,
-          avatar: this.lastImage
+          avatar: this.lastImage,
         },
         { headers }
       )
         .then((response) => {
-          if (response.data.body.code == 2) {
-            ElMessage.error("请重新登录");
-          }
-          if (response.data.body.code == 1) {
-            ElMessage.error("动物不存在");
-          }
           console.log(response);
           this.lastImage = "";
         })
         .catch((response) => {
+          console.log(response);
           ElMessage.error("网络错误");
         });
       this.loading = true;
@@ -307,11 +375,12 @@ export default defineComponent({
             } else {
               item["status"] = "未领养";
             }
-            tableData.list.push(item);
+            this.tableData.list.push(item);
           }
-          totalNum.value = response.data.body.sumNum;
+          this.totalNum = response.data.body.sumNum;
         })
         .catch((response) => {
+          console.log(response);
           ElMessage.error("网络错误");
         });
       this.loading = false;
@@ -325,11 +394,12 @@ export default defineComponent({
           name: this.name,
           intro: this.intro,
           adopted: this.adopted,
-          avatar: this.lastImage
+          avatar: this.lastImage,
         },
         { headers }
       )
         .then((response) => {
+          console.log(response);
           if (response.data.code != 0) {
             ElMessage(response.data.message);
           } else {
@@ -359,11 +429,12 @@ export default defineComponent({
             } else {
               item["status"] = "未领养";
             }
-            tableData.list.push(item);
+            this.tableData.list.push(item);
           }
-          totalNum.value = response.data.body.sumNum;
+          this.totalNum = response.data.body.sumNum;
         })
         .catch((response) => {
+          console.log(response);
           ElMessage.error("网络错误");
         });
       this.loading = false;
@@ -375,7 +446,7 @@ export default defineComponent({
         "/api/admin/animal/get",
         {
           pageNum: 20,
-          page: index,
+          page: index - 1,
           context: this.context,
         },
         { headers }
@@ -389,14 +460,19 @@ export default defineComponent({
             } else {
               item["status"] = "未领养";
             }
-            tableData.list.push(item);
+            this.tableData.list.push(item);
           }
-          totalNum.value = response.data.body.sumNum;
+          this.totalNum = response.data.body.sumNum;
         })
         .catch((response) => {
-          ElMessage.error("网络错误");
+          console.log(response);
         });
       this.loading = false;
+    },
+    handleClose() {
+      this.lastImage = ""
+      this.dialogVisible = false;
+      this.dialogVisible1 = false;
     },
     search() {
       this.loading = true;
@@ -432,13 +508,15 @@ export default defineComponent({
       this.loading = false;
     },
     customRequest(options) {
-      console.log("bbb");
+      console.log(options);
       let params = new window.FormData();
       params.append("image", options.file);
       params.append("type", "animal");
       Axios.post("/api/image/upload", params, config)
         .then((response) => {
-          this.lastImage = response.data.body.imagePath
+          this.lastImage = response.data.body.imagePath;
+          this.fileList[0].status = 'done'
+          console.log(response);
         })
         .catch((response) => {
           console.log(response);

@@ -9,7 +9,7 @@
                     <el-scrollbar>
                     <el-aside :width="'180px'">
                         <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                            text-color="#fff" :default-active="active" vue-router="true" >
+                            text-color="#fff" default-active="active" vue-router="true" >
                             <el-menu-item index="1" @click="tweet"> 
                                 <span>帖子审核</span>
                             </el-menu-item>
@@ -32,7 +32,7 @@
                     </el-aside>
                 </el-scrollbar>
                     <el-main class="main">
-                        <router-view :key="routerKey"></router-view>
+                        <router-view></router-view>
                     </el-main>
                 </el-container>
             </div>
