@@ -140,7 +140,7 @@
           <span class="dialog-footer">
             <el-input v-model="response" />
             <el-button @click="dialogVisible1 = false">取消</el-button>
-            <el-button type="primary" @click="solve"> 回复 </el-button>
+            <el-button type="primary" @click="solveRsponse"> 回复 </el-button>
           </span>
         </template>
       </el-dialog>
@@ -370,23 +370,26 @@ export default defineComponent({
           console.log(response);
         });
     },
-    solve() {
+    solveRsponse() {
       Axios.post(
         "/api/admin/help/reply/",
         {
-          tweetId: this.idC,
+          helpId: this.idC,
           content: this.response
         },
         { headers }
       )
         .then((response) => {
+          console.log(response);
+          console.log(this.idC);
+          console.log(this.response);
           if (response.data.code != 0) {
             ElMessage(response.data.message);
           } else {
             ElMessage("Success!");
           }
           setTimeout(1000);
-          router.go(0)
+          this.$router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");
@@ -448,7 +451,7 @@ export default defineComponent({
       )
         .then((response) => {
           ElMessage(response.data.message);
-          this.tableData.list[this.index].status = solve ? '已解决' : '待解决'
+          this.tableData.list[this.index].status = this.solve ? '已解决' : '待解决'
         })
         .catch((response) => {
           ElMessage("网络错误");

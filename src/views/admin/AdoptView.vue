@@ -225,11 +225,11 @@ export default defineComponent({
       }
     },
     handelClick(i) {
-      this.idC = tableData.list[i-1].id;
-      this.content = tableData.list[i-1].reason;
-      this.aniname = tableData.list[i-1].aniname;
-      this.username = tableData.list[i-1].username;
-      this.date = tableData.list[i-1].time;
+      this.idC = this.tableData.list[i-1].id;
+      this.content = this.tableData.list[i-1].reason;
+      this.aniname = this.tableData.list[i-1].aniname;
+      this.username = this.tableData.list[i-1].username;
+      this.date = this.tableData.list[i-1].time;
     },
     pass() {
       Axios.post(

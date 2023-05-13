@@ -73,10 +73,9 @@
           <a-upload
           list-type="picture-card"
           v-model:file-list="fileList"
-          @preview="handlePreview"
           :customRequest="customRequest"
         >
-          <div v-if="fileList.length < 1">
+          <div v-if="fileList.length < 10">
             <plus-outlined />
             <div class="ant-upload-text">Upload</div>
           </div>
@@ -84,30 +83,6 @@
         <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
           <img alt="example" style="width: 100%" :src="previewImage" />
         </a-modal>
-          <!-- <el-image :src="url" />
-          <a-upload
-            :customRequest="customRequest"
-            @change="handleChange"
-            list-type="picture"
-            v-model:file-list="fileList"
-            class="upload-list-inline"
-          >
-            <el-button>
-              <upload-outlined></upload-outlined>
-              上传/修改图片
-            </el-button>
-          </a-upload> -->
-          <!-- <a-upload
-            v-model:file-list="fileList"
-            name="file"
-            :customRequest="customRequest"
-            @change="handleChange"
-          >
-          <el-button>
-              <upload-outlined></upload-outlined>
-              Click to Upload
-            </el-button>
-          </a-upload> -->
         </el-form-item>
         <el-form-item label="领养状态">
           <el-select v-model="adopted">
@@ -123,7 +98,7 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog v-model="dialogVisible1" title="新增" width="50%">
+    <el-dialog v-model="dialogVisible1" title="新增档案" width="50%">
       <el-form :model="form" label-width="120px">
         <el-form-item label="动物名称">
           <el-input v-model="name" />
@@ -133,16 +108,19 @@
         </el-form-item>
         <el-form-item label="动物图片">
           <a-upload
-            v-model:file-list="fileList"
-            name="image"
-            :customRequest="customRequest"
-            @change="handleChange"
-          >
-            <el-button>
-              <upload-outlined></upload-outlined>
-              Click to Upload
-            </el-button>
-          </a-upload>
+          list-type="picture-card"
+          v-model:file-list="fileList"
+          @preview="handlePreview"
+          :customRequest="customRequest"
+        >
+          <div v-if="fileList.length < 10">
+            <plus-outlined />
+            <div class="ant-upload-text">Upload</div>
+          </div>
+        </a-upload>
+        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+          <img alt="example" style="width: 100%" :src="previewImage" />
+        </a-modal>
         </el-form-item>
         <el-form-item label="领养状态">
           <el-select v-model="adopted">
@@ -158,6 +136,17 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog v-model="dialogVisibleCD" title="提示">
+    <span>确定要删除“{{ this.name }}”的档案吗</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisibleCD = false">取消</el-button>
+        <el-button type="primary" @click="confirmDelete">
+          确定
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
   </div>
 </template>
 
@@ -186,6 +175,9 @@
 .ant-upload-select-picture-card .ant-upload-text {
   margin-top: 8px;
   color: #666;
+}
+.dialog-footer button:first-child {
+  margin-right: 10px;
 }
 </style>
 
@@ -235,15 +227,7 @@ export default defineComponent({
     const handleCancel = () => {
       previewVisible.value = false;
     };
-    const handlePreview = async file => {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-      previewImage.value = file.url || file.preview;
-      previewVisible.value = true;
-    };
     const handleChange = ({ fileList: newFileList }) => {
-      console.log('aaa')
       console.log(newFileList)
       fileList.value = newFileList;
     };
@@ -256,7 +240,9 @@ export default defineComponent({
     const adopted = ref(false);
     const currentPage = ref(1);
     loading.value = true;
-    const url = ref('')
+    const dialogVisibleCD = ref(false);
+    const url = ref('');
+    const imageNum = ref(0)
     Axios.post(
       "/api/admin/animal/get/",
       {
@@ -306,9 +292,10 @@ export default defineComponent({
       loading,
       url,
       handleCancel,
-      handlePreview,
       previewVisible,
-      previewImage
+      previewImage,
+      dialogVisibleCD,
+      imageNum
     };
   },
   methods: {
@@ -317,14 +304,16 @@ export default defineComponent({
       this.name = this.tableData.list[index].name;
       this.adopted = this.tableData.list[index].adopted;
       this.id = this.tableData.list[index].id;
-      this.url = this.tableData.list[index].avatar;
+      this.urls = this.tableData.list[index].avatar;
       this.fileList = []
-      this.fileList.push({
-        uid: 1,
-        name: 'image.png',
+      for(var i = 0; i < this.urls.length; i++) {
+        this.fileList.push({
+        uid: i,
+        name: 'image' + i + '.png',
         status: 'done',
-        url: '/api' + this.url,
+        url: '/api' + urls[i],
       })
+      }
       this.dialogVisible = true;
     },
     add() {
@@ -522,6 +511,32 @@ export default defineComponent({
           console.log(response);
         });
     },
+    deleteRow(index) {
+      this.name = this.tableData.list[index].name;
+      this.id = this.tableData.list[index].id;
+      this.dialogVisibleCD = true;
+    },
+    confirmDelete() {
+      console.log(this.id)
+      Axios.post(
+        "/api/admin/animal/delete",
+        {
+          recordId: this.id
+        },
+        { headers }
+      )
+        .then((response) => {
+          console.log(response);
+          this.dialogVisibleCD = false
+          ElMessage.success("删除成功");
+          setTimeout(1500);
+          this.$router.go(0);
+        })
+        .catch((response) => {
+          console.log(response);
+          ElMessage.error("网络错误");
+        });
+    }
   },
 });
 </script>

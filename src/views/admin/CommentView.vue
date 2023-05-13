@@ -270,13 +270,15 @@ export default defineComponent({
         { headers }
       )
         .then((response) => {
+          console.log('commentId: ' + this.idC + ', operate: 1, reason: ' + this.reason)
           if(response.data.code != 0) {
             ElMessage(response.data.message);
           } else {
             ElMessage('Success!');
           }
-          setTimeout(1000);
-          this.router.go(0)
+          console.log(response)
+          // setTimeout(1000);
+          // this.router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");
