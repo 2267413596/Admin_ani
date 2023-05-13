@@ -311,7 +311,7 @@ export default defineComponent({
         uid: i,
         name: 'image' + i + '.png',
         status: 'done',
-        url: '/api' + urls[i],
+        url: '/api' + this.urls[i],
       })
       }
       this.dialogVisible = true;
