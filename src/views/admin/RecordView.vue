@@ -110,7 +110,6 @@
           <a-upload
           list-type="picture-card"
           v-model:file-list="fileList"
-          @preview="handlePreview"
           :customRequest="customRequest"
         >
           <div v-if="fileList.length < 10">
@@ -220,7 +219,7 @@ export default defineComponent({
   },
   setup() {
     const context = ref("");
-    const lastImage = ref("");
+    const lastImage = ref([]);
     const id = ref(0);
     const loading = ref(false);
     const totalNum = ref(0);
@@ -307,12 +306,14 @@ export default defineComponent({
       this.urls = this.tableData.list[index].avatar;
       this.fileList = []
       for(var i = 0; i < this.urls.length; i++) {
+        this.lastImage.push(this.urls[i])
         this.fileList.push({
         uid: i,
         name: 'image' + i + '.png',
         status: 'done',
         url: '/api' + this.urls[i],
       })
+      console.log(this.fileList)
       }
       this.dialogVisible = true;
     },
@@ -339,7 +340,8 @@ export default defineComponent({
       )
         .then((response) => {
           console.log(response);
-          this.lastImage = "";
+          this.dialogVisible = false
+          this.lastImage = [];
         })
         .catch((response) => {
           console.log(response);
@@ -459,7 +461,7 @@ export default defineComponent({
       this.loading = false;
     },
     handleClose() {
-      this.lastImage = ""
+      this.lastImage = []
       this.dialogVisible = false;
       this.dialogVisible1 = false;
     },
@@ -503,7 +505,7 @@ export default defineComponent({
       params.append("type", "animal");
       Axios.post("/api/image/upload", params, config)
         .then((response) => {
-          this.lastImage = response.data.body.imagePath;
+          this.lastImage.push(response.data.body.imagePath);
           this.fileList[0].status = 'done'
           console.log(response);
         })

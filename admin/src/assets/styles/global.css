@@ -1,0 +1,16 @@
+.el-header {
+    background-color: dimgrey;
+    margin-top: 0px;
+    height: 50px;
+}
+.el-main {
+    background-color: azure;
+    height: calc(100vh - 50px);
+}
+.el-aside {
+    background-color: #545c64;
+    height: calc(100vh - 50px);
+}
+
+body>.el-container {
+}

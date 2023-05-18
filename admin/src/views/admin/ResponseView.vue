@@ -95,9 +95,6 @@
           <el-form-item label="求助内容">
             <span>{{ contentC }}</span>
           </el-form-item>
-          <div class="demo-image__lazy">
-            <el-image v-for="url in urls.list" :key="url" :src="url" lazy />
-          </div>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
@@ -138,9 +135,6 @@
           <el-form-item label="求助内容">
             <span>{{ contentC }}</span>
           </el-form-item>
-          <div class="demo-image__lazy">
-            <el-image v-for="url in urls.list" :key="url" :src="url" lazy />
-          </div>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
@@ -159,9 +153,6 @@
 
 #search {
   background-color: aquamarine;
-}
-.demo-image__lazy .el-image:last-child {
-  margin-bottom: 0;
 }
 </style>
 
@@ -203,8 +194,7 @@ export default defineComponent({
     var response = ref('');
     const dialogVisible1 = ref(false);
     const dialogVisible2 = ref(false);
-    const index = ref(0);
-    const urls = ref([])
+    const index = ref(0)
     //审核求助
     console.log("aaa");
     Axios.post(
@@ -256,8 +246,7 @@ export default defineComponent({
       empty,
       solve,
       response,
-      index,
-      urls
+      index
     };
   },
   methods: {
@@ -419,12 +408,10 @@ export default defineComponent({
         { headers }
       )
         .then((response) => {
-          console.log(response)
           this.titleC = response.data.body.title
           this.dateC = response.data.body.time
           this.contentC = response.data.body.content
           this.userC = response.data.body.username
-          this.urls = response.data.body.images
         })
         .catch((response) => {
           ElMessage("网络错误");
@@ -448,7 +435,6 @@ export default defineComponent({
           this.dateC = response.data.body.time
           this.contentC = response.data.body.content
           this.userC = response.data.body.username
-          this.urls = response.data.body.images
         })
         .catch((response) => {
           ElMessage("网络错误");

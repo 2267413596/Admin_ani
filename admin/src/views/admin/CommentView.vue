@@ -1,11 +1,8 @@
 <template>
-  <div id="root" v-loading="this.loading">
+  <div id="root">
     <el-row>
       <el-col :span="4" :offset="1">
-        <span style="margin-left: 50px">待审核申请：</span>
-        <div v-if="this.empty" style="margin-left: 50px; top: 30px">
-          无待审核内容
-        </div>
+        <span style="margin-left: 50px">待审核评论：</span>
         <ul
           v-infinite-scroll="load"
           class="infinite-list"
@@ -19,32 +16,31 @@
             @click="handelClick(i)"
             style="cursor: pointer;"
           >
-            {{ this.tableData.list[i - 1].username }}:...
+            {{ tableData.list[i - 1].username }}:...
           </li>
         </ul>
+        <div v-if="this.empty" style="margin-left: 50px; top: 30px">
+          无待审核内容
+        </div>
       </el-col>
       <el-col :span="12" :offset="1" v-if="!this.empty">
         <div class="basic-box" id="infomation" style="font-size: 8px">
           <p style="text-align: center">基本信息</p>
           <el-row>
-            <el-col :span="8">
-              <span>领养申请动物: {{ this.aniname }}</span>
+            <el-col :span="4">
+              <span>帖子id: {{ this.idC }}</span>
             </el-col>
-            <el-col :span="8">
-              <span>用户：{{ this.username }}</span>
+            <el-col :span="4">
+              <span>用户：{{ this.userName }}</span>
             </el-col>
-            <el-col :span="8">
-              <span>日期：{{ this.date }}</span>
+            <el-col :span="16">
+              <span>时间: {{ this.date }}</span>
             </el-col>
           </el-row>
         </div>
         <div class="basic-box" id="comment">
-          <p>申请理由</p>
-          <span style="font-size: small">{{ this.content }}</span>
-          <el-divider />
-          <!-- <p>联系方式</p>
-          <p style="font-size: small">手机号:{{ this.phone }}</p>
-          <p style="font-size: small">邮箱:{{ this.email }}</p> -->
+          <p style="text-align: center">评论内容</p>
+          <span>{{ this.content }}</span>
         </div>
       </el-col>
       <el-col :span="12" :offset="1" v-if="this.empty">
@@ -70,8 +66,8 @@
     </div>
   </div>
 </template>
-  
-  <style>
+
+<style>
 @import "../../assets/styles/global.css";
 @import "../../assets/styles/userView.css";
 
@@ -108,39 +104,45 @@
   margin-top: 10px;
 }
 </style>
-  
+
 <script>
 import { defineComponent, onMounted, ref, reactive } from "vue";
 import Axios from "axios";
 import { useCookies } from "vue3-cookies";
+import { method } from "lodash";
 import { useRouter } from "vue-router";
 import { ElMessage } from 'element-plus'
 
+
 const { cookies } = useCookies();
 const headers = {
-      "Content-Type": "application/json",
-      Authorization: cookies.get("myCookie"),
-    };
-const loading = ref(false);
+  "Content-Type": "application/json",
+  Authorization: cookies.get("myCookie"),
+};
 export default defineComponent({
-  beforeCreate() {
-    document.querySelector("body").setAttribute("style", "margin: 0");
-  },
   setup() {
-    let tableData = reactive({ list: [] });
-    const count = ref(0);
-    const phone = ref("");
-    const content = ref("");
-    const email = ref("");
-    const aniname = ref("");
-    const username = ref("");
-    const idC = ref(0);
-    const date = ref("");
-    const reason = ref("");
     const empty = ref(true);
-    const max = ref(0)
+    const account = ref("");
+    var token = ref("aa");
+    const password = ref("");
+    const router = useRouter();
+    var config = {
+      headers: {
+        Authorization: "",
+      },
+    };
+    const count = ref(0);
+    const max = ref(0);
+    const page = ref(0);
+    let tableData = reactive({ list: [] });
+    const reason = ref("");
+    const tweetId = ref(0);
+    const date = ref("");
+    const userName = ref("");
+    const content = ref("");
+    const idC = ref(0);
     Axios.post(
-      "/api/admin/adoption/get/",
+      "/api/admin/comment/get/",
       {
         pageNum: 20,
         page: 0,
@@ -149,42 +151,45 @@ export default defineComponent({
     )
       .then((response) => {
         console.log(response);
-        if (response.data.body.adoptions != null) {
-          for (var i = 0; i < response.data.body.adoptions.length; i++) {
-            var item = response.data.body.adoptions[i];
-            
+        if (response.data.body.comments != null) {
+          for (var i = 0; i < response.data.body.comments.length; i++) {
+            var item = response.data.body.comments[i];
             tableData.list.push(item);
           }
-        console.log(tableData.list);
-        empty.value = false;
-        idC.value = tableData.list[0].id;
-        content.value = tableData.list[0].reason;
-        aniname.value = tableData.list[0].aniname;
-        username.value = tableData.list[0].username;
-        date.value = tableData.list[0].time;
+        }
         count.value = tableData.list.length;
-        max.value = response.data.body.sumNum
+        page.value += 1;
+        max.value = response.data.body.sumNum;
+        if (count.value > 0) {
+          empty.value = false;
+          tweetId.value = tableData.list[0].tweetId;
+          idC.value = tableData.list[0].id;
+          userName.value = tableData.list[0].username;
+          content.value = tableData.list[0].content;
+          date.value = tableData.list[0].time;
         }
       })
       .catch((response) => {
-        alert("网络错误");
         console.log(response);
       });
     return {
-      loading,
-      tableData,
+      password,
+      account,
       empty,
-      phone,
-      content,
-      email,
-      aniname,
-      username,
+      token,
+      cookies,
+      config,
       count,
-      idC,
-      date,
+      tableData,
+      page,
       max,
+      reason,
+      tweetId,
       date,
-      reason
+      userName,
+      content,
+      router,
+      idC,
     };
   },
   methods: {
@@ -193,18 +198,18 @@ export default defineComponent({
         return;
       }
       Axios.post(
-        "/api/admin/adoption/get/",
+        "/api/admin/comment/get/",
         {
           pageNum: 20,
           page: this.page,
         },
-        { headers }
+        { headers  }
       )
         .then((response) => {
           console.log(response);
-          if (response.data.body.adoptions != null) {
-            for (var i = 0; i < response.data.body.adoptions.length; i++) {
-              var item = response.data.body.adoptions[i];
+          if (response.data.body.comments != null) {
+            for (var i = 0; i < response.data.body.comments.length; i++) {
+              var item = response.data.body.comments[i];
               tableData.list.push(item);
             }
           }
@@ -225,17 +230,16 @@ export default defineComponent({
       }
     },
     handelClick(i) {
-      this.idC = this.tableData.list[i-1].id;
-      this.content = this.tableData.list[i-1].reason;
-      this.aniname = this.tableData.list[i-1].aniname;
-      this.username = this.tableData.list[i-1].username;
-      this.date = this.tableData.list[i-1].time;
+      this.idC = this.tableData.list[i - 1].id;
+      this.userName = this.tableData.list[i - 1].username;
+      this.date = this.tableData.list[i - 1].time;
+      this.content = this.tableData.list[i - 1].content;
     },
     pass() {
       Axios.post(
-        "/api/admin/adoption/censor/",
+        "/api/admin/comment/censor/",
         {
-          adoptionId: this.idC,
+          commentId: this.idC,
           operate: 0,
           reason: "",
         },
@@ -257,7 +261,7 @@ export default defineComponent({
     },
     fail() {
       Axios.post(
-        "/api/admin/adoption/censor/",
+        "/api/admin/comment/censor/",
         {
           commentId: this.idC,
           operate: 1,
@@ -266,13 +270,15 @@ export default defineComponent({
         { headers }
       )
         .then((response) => {
+          console.log('commentId: ' + this.idC + ', operate: 1, reason: ' + this.reason)
           if(response.data.code != 0) {
             ElMessage(response.data.message);
           } else {
             ElMessage('Success!');
           }
-          setTimeout(1000);
-          this.$router.go(0)
+          console.log(response)
+          // setTimeout(1000);
+          // this.router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");

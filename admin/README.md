@@ -40,9 +40,7 @@ npm run test:unit:dev # or `npm run test:unit` for headless testing
 npm run test:e2e:dev
 ```
 
-This runs the end-to-end tests against the Vite development server.- [admin](#admin)
-
-
+This runs the end-to-end tests against the Vite development server.
 It is much faster than the production build.
 
 But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
@@ -51,5 +49,3 @@ But it's still recommended to test the production build with `test:e2e` before d
 npm run build
 npm run test:e2e
 ```
-
-
