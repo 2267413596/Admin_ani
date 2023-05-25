@@ -277,8 +277,8 @@ export default defineComponent({
             ElMessage('Success!');
           }
           console.log(response)
-          // setTimeout(1000);
-          // this.router.go(0)
+          setTimeout(1000);
+          this.$router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");

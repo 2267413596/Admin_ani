@@ -186,6 +186,14 @@ export default defineComponent({
               contentC.value = response.data.body.content;
               userC.value = tableData.list[0].username;
               idC.value = tableData.list[0].id;
+              urls.list = []
+              if (response.data.body.images != null) {
+                for (var i = 0; i < response.data.body.images.length; i++) {
+                  var item = response.data.body.images[i];
+                  urls.list.push('/api' + item)
+                }
+                console.log(urls.list)
+              }
             })
             .catch((response) => {
               ElMessage("网络错误");
@@ -264,6 +272,7 @@ export default defineComponent({
               this.dateC = response.data.body.time
               this.contentC = response.data.body.content;
               this.userC = response.data.body.username;
+              this.urls.list = []
               if (response.data.body.images != null) {
                 for (var i = 0; i < response.data.body.images.length; i++) {
                   var item = response.data.body.images[i];

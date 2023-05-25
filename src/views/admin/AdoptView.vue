@@ -256,6 +256,7 @@ export default defineComponent({
         });
     },
     fail() {
+      console.log(this.idC)
       Axios.post(
         "/api/admin/adoption/censor/",
         {
@@ -271,8 +272,8 @@ export default defineComponent({
           } else {
             ElMessage('Success!');
           }
-          setTimeout(1000);
-          this.$router.go(0)
+          // setTimeout(1000);
+          // this.$router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");
