@@ -19,7 +19,7 @@
       <el-table
         :data="tableData.list"
         style="width: 100%"
-        max-height="250"
+        max-height="420"
         v-loading="loading"
       >
         <el-table-column prop="email" label="邮箱" width="200" />
@@ -54,6 +54,7 @@
         @current-change="handleCurrentChange"
         layout="total, prev, pager, next"
         :total="totalNum"
+        :default-page-size="20"
       >
       </el-pagination>
     </div>
@@ -195,7 +196,7 @@ export default defineComponent({
               } else {
                 item["status"] = "正常";
               }
-              tableData.list.push(item);
+              this.tableData.list.push(item);
             }
           }
           this.totalNum = response.data.body.sumNum;
