@@ -81,14 +81,8 @@
         <el-form :model="form" label-width="120px">
           <el-form-item label="基本信息">
             <el-row>
-              <el-col :span="6">
-                <span>标题{{ titleC }}</span>
-              </el-col>
-              <el-col :span="6">
-                <span>用户{{ userC }}</span>
-              </el-col>
-              <el-col :span="12">
-                <span>日期{{ dateC }}</span>
+              <el-col :span="24">
+                <span>标题: {{ titleC }}<br/>用户: {{ userC }}<br/>时间: {{ dateC }}</span>
               </el-col>
             </el-row>
           </el-form-item>
@@ -115,15 +109,11 @@
       >
         <el-form :model="form" label-width="120px">
           <el-form-item label="基本信息">
-            <el-col :span="6">
-                <span>标题{{ titleC }}</span>
+            <el-row>
+              <el-col :span="24">
+                <span>标题: {{ titleC }}<br/>用户: {{ userC }}<br/>时间: {{ dateC }}</span>
               </el-col>
-              <el-col :span="6">
-                <span>用户{{ userC }}</span>
-              </el-col>
-              <el-col :span="12">
-                <span>日期{{ dateC }}</span>
-              </el-col>
+            </el-row>
           </el-form-item>
           <el-form-item label="求助状态">
             <el-switch
@@ -162,6 +152,9 @@
 }
 .demo-image__lazy .el-image:last-child {
   margin-bottom: 0;
+}
+.el-form-item__content{
+  width: 100%;
 }
 </style>
 
@@ -204,7 +197,7 @@ export default defineComponent({
     const dialogVisible1 = ref(false);
     const dialogVisible2 = ref(false);
     const index = ref(0);
-    const urls = ref([])
+    const urls = reactive({ list: [] });
     //审核求助
     console.log("aaa");
     Axios.post(
@@ -424,7 +417,14 @@ export default defineComponent({
           this.dateC = response.data.body.time
           this.contentC = response.data.body.content
           this.userC = response.data.body.username
-          this.urls = response.data.body.images
+          this.urls.list = []
+          if (response.data.body.images != null) {
+            for (var i = 0; i < response.data.body.images.length; i++) {
+              var item = response.data.body.images[i];
+              this.urls.list.push('/api' + item)
+            }
+            console.log(this.urls.list)
+          }
         })
         .catch((response) => {
           ElMessage("网络错误");
@@ -448,7 +448,14 @@ export default defineComponent({
           this.dateC = response.data.body.time
           this.contentC = response.data.body.content
           this.userC = response.data.body.username
-          this.urls = response.data.body.images
+          this.urls.list = []
+          if (response.data.body.images != null) {
+            for (var i = 0; i < response.data.body.images.length; i++) {
+              var item = response.data.body.images[i];
+              this.urls.list.push('/api' + item)
+            }
+            console.log(this.urls.list)
+          }
         })
         .catch((response) => {
           ElMessage("网络错误");
