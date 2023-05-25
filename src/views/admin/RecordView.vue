@@ -74,6 +74,7 @@
           list-type="picture-card"
           v-model:file-list="fileList"
           :customRequest="customRequest"
+          :remove="deleteFileItem"
         >
           <div v-if="fileList.length < 10">
             <plus-outlined />
@@ -111,6 +112,7 @@
           list-type="picture-card"
           v-model:file-list="fileList"
           :customRequest="customRequest"
+          :remove="deleteFileItem"
         >
           <div v-if="fileList.length < 10">
             <plus-outlined />
@@ -227,6 +229,7 @@ export default defineComponent({
       previewVisible.value = false;
     };
     const handleChange = ({ fileList: newFileList }) => {
+      console.log('new')
       console.log(newFileList)
       fileList.value = newFileList;
     };
@@ -298,6 +301,15 @@ export default defineComponent({
     };
   },
   methods: {
+    deleteFileItem(file) {
+      console.log('delete')
+      //找到当前文件所在列表的索引
+      let index = this.fileList.indexOf(file)
+      //从列表中移除该文件
+      this.fileList.splice(index, 1);
+      this.lastImage.splice(index, 1)
+      return true;
+    },
     edit(index) {
       this.intro = this.tableData.list[index].intro;
       this.name = this.tableData.list[index].name;
@@ -339,9 +351,21 @@ export default defineComponent({
         { headers }
       )
         .then((response) => {
+          console.log('保存')
+          console.log('recordId')
+          console.log(this.id)
+          console.log('name')
+          console.log(this.name)
+          console.log('intro')
+          console.log(this.intro)
+          console.log('adopted')
+          console.log(this.adopted)
+          console.log('avatar')
+          console.log(this.lastImage)
           console.log(response);
           this.dialogVisible = false
           this.lastImage = [];
+          this.fileList = [];
         })
         .catch((response) => {
           console.log(response);
@@ -462,6 +486,7 @@ export default defineComponent({
     },
     handleClose() {
       this.lastImage = []
+      this.fileList = []
       this.dialogVisible = false;
       this.dialogVisible1 = false;
     },
@@ -499,6 +524,7 @@ export default defineComponent({
       this.loading = false;
     },
     customRequest(options) {
+      console.log('op')
       console.log(options);
       let params = new window.FormData();
       params.append("image", options.file);
@@ -506,7 +532,7 @@ export default defineComponent({
       Axios.post("/api/image/upload", params, config)
         .then((response) => {
           this.lastImage.push(response.data.body.imagePath);
-          this.fileList[0].status = 'done'
+          this.fileList[this.fileList.length - 1].status = 'done'
           console.log(response);
         })
         .catch((response) => {
