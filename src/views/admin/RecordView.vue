@@ -75,6 +75,7 @@
           v-model:file-list="fileList"
           :customRequest="customRequest"
           :remove="deleteFileItem"
+          :beforeUpload="beforeFileUpload"
         >
           <div v-if="fileList.length < 10">
             <plus-outlined />
@@ -113,6 +114,7 @@
           v-model:file-list="fileList"
           :customRequest="customRequest"
           :remove="deleteFileItem"
+          :beforeUpload="beforeFileUpload"
         >
           <div v-if="fileList.length < 10">
             <plus-outlined />
@@ -564,7 +566,24 @@ export default defineComponent({
           console.log(response);
           ElMessage.error("网络错误");
         });
-    }
+    },
+    async beforeFileUpload(file, fileList) {
+      return new Promise((resolve, reject) => {
+        const isLt2KB = file.size / 1024 < 10 * 1024
+        if (!isLt2KB) {
+          ElMessage('上传文件大于10mb!')
+          reject(false)
+        }
+        var fileNames = file.name.split('.')
+        var fileType = fileNames[fileNames.length - 1].toLocaleLowerCase()
+        var extList = ['jpg', 'png', 'jpeg']
+        if (!extList.find((item) => item == fileType)) {
+          ElMessage('只能上传.jpg/.png/.jpeg类型的图片！')
+          reject(false)
+        }
+        resolve(true)
+      })
+    },
   },
 });
 </script>

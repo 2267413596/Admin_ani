@@ -4,7 +4,7 @@
     <div class="basic-box" style="margin: 20px">
       <el-row :gutter="20">
         <el-select v-model="select">
-          <el-option label="审核求助" value="0" />
+          <el-option label="待审核求助" value="0" />
           <el-option label="已解决求助" value="1" />
           <el-option label="待解决求助" value="2" />
         </el-select>
@@ -262,7 +262,7 @@ export default defineComponent({
           pageNum: 20,
           page: 0,
           context: this.context,
-          censored: this.select == 0 ? 0 : 1,
+          censored: this.select == 0 || this.select == "待审核求助" ? 0 : 1,
           solved: this.select == 1
         },
         { headers }
