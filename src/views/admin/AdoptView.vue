@@ -260,20 +260,21 @@ export default defineComponent({
       Axios.post(
         "/api/admin/adoption/censor/",
         {
-          commentId: this.idC,
+          adoptionId: this.idC,
           operate: 1,
           reason: this.reason,
         },
         { headers }
       )
         .then((response) => {
+          console.log(response)
           if(response.data.code != 0) {
             ElMessage(response.data.message);
           } else {
             ElMessage('Success!');
           }
-          // setTimeout(1000);
-          // this.$router.go(0)
+          setTimeout(1000);
+          this.$router.go(0)
         })
         .catch((response) => {
           ElMessage("网络错误");

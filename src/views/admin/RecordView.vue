@@ -353,21 +353,10 @@ export default defineComponent({
         { headers }
       )
         .then((response) => {
-          console.log('保存')
-          console.log('recordId')
-          console.log(this.id)
-          console.log('name')
-          console.log(this.name)
-          console.log('intro')
-          console.log(this.intro)
-          console.log('adopted')
-          console.log(this.adopted)
-          console.log('avatar')
-          console.log(this.lastImage)
-          console.log(response);
           this.dialogVisible = false
           this.lastImage = [];
           this.fileList = [];
+          this.$router.go(0)
         })
         .catch((response) => {
           console.log(response);
@@ -438,17 +427,9 @@ export default defineComponent({
         { headers }
       )
         .then((response) => {
-          this.tableData.list = [];
-          for (var i = 0; i < response.data.body.records.length; i++) {
-            var item = response.data.body.records[i];
-            if (item.adopted == true) {
-              item["status"] = "已领养";
-            } else {
-              item["status"] = "未领养";
-            }
-            this.tableData.list.push(item);
-          }
-          this.totalNum = response.data.body.sumNum;
+          ElMessage.success('修改成功')
+          setTimeout(1000);
+          this.$router.go(0)
         })
         .catch((response) => {
           console.log(response);
