@@ -24,7 +24,6 @@
       >
         <el-table-column prop="email" label="邮箱" width="200" />
         <el-table-column prop="username" label="用户昵称" width="120" />
-        <el-table-column prop="phone" label="手机号" width="180" />
         <el-table-column prop="status" label="状态" width="100" />
         <el-table-column prop="bio" label="个性签名" width="400" />
         <el-table-column fixed="right" label="Operations">

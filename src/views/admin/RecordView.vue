@@ -10,7 +10,7 @@
           <el-button type="primary" @click="search">搜索 </el-button>
         </el-col>
         <el-col :span="3">
-          <el-button type="primary" icon="Search" @click="add"
+          <el-button type="primary" :icon="PlusOutlined" @click="add"
             >新增档案</el-button
           >
         </el-col>

@@ -48,8 +48,22 @@
           <div class="demo-image__lazy">
             <el-image v-for="url in urls.list" :key="url" :src="url" lazy />
           </div>
+          <el-input
+            v-model="reason"
+            placeholder="请输入内容"
+            style="margin-top: 20px; margin-bottom: 20px;"
+
+          ></el-input>
+          <el-row>
+            <el-col :span="20">
+              <el-button type="danger" @click="fail">驳回</el-button>
+            </el-col>
+              <el-col :span="2">
+                <el-button type="success" @click="pass">通过</el-button>
+              </el-col>
+          </el-row>
         </div>
-        <div class="basic-box" id="bottom">
+        <!-- <div class="basic-box" id="bottom">
           <el-input
             v-model="reason"
             placeholder="请输入内容"
@@ -63,7 +77,7 @@
                 <el-button type="success" @click="pass">通过</el-button>
               </el-col>
           </el-row>
-        </div>
+        </div> -->
       </el-col>
       <el-col :span="12" :offset="1" v-if="this.empty">
         <div style="margin-top: 20vh; margin-left: 20vw">
@@ -79,9 +93,12 @@
 @import "../../assets/styles/userView.css";
 
 #comment {
-  min-height: 60%;
+  height:min-content;
 }
-
+.bottom {
+  margin-top: 40px;
+  position:absolute;
+}
 #infomation {
   margin-bottom: 20px;
 }
