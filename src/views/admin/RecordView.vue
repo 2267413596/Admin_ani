@@ -62,7 +62,7 @@
     </div>
     <el-dialog v-model="dialogVisible" title="编辑档案" 
     width="50%" :before-close="handleClose">
-      <el-form :model="form" label-width="120px">
+      <el-form label-width="120px">
         <el-form-item label="动物名称">
           <el-input v-model="name" />
         </el-form-item>
@@ -77,7 +77,7 @@
           :remove="deleteFileItem"
           :beforeUpload="beforeFileUpload"
         >
-          <div v-if="fileList.length < 10">
+          <div v-if="fileList.length < 4">
             <plus-outlined />
             <div class="ant-upload-text">Upload</div>
           </div>
@@ -101,7 +101,7 @@
       </template>
     </el-dialog>
     <el-dialog v-model="dialogVisible1" title="新增档案" width="50%">
-      <el-form :model="form" label-width="120px">
+      <el-form  label-width="120px">
         <el-form-item label="动物名称">
           <el-input v-model="name" />
         </el-form-item>
@@ -116,7 +116,7 @@
           :remove="deleteFileItem"
           :beforeUpload="beforeFileUpload"
         >
-          <div v-if="fileList.length < 10">
+          <div v-if="fileList.length < 4">
             <plus-outlined />
             <div class="ant-upload-text">Upload</div>
           </div>
@@ -356,42 +356,17 @@ export default defineComponent({
           this.dialogVisible = false
           this.lastImage = [];
           this.fileList = [];
+          ElMessage('保存成功!')
+          setTimeout(1500)
           this.$router.go(0)
         })
         .catch((response) => {
           console.log(response);
           ElMessage.error("网络错误");
         });
-      this.loading = true;
-      Axios.post(
-        "/api/admin/animal/get",
-        {
-          pageNum: 20,
-          page: 0,
-          context: this.context,
-        },
-        { headers }
-      )
-        .then((response) => {
-          this.tableData.list = [];
-          for (var i = 0; i < response.data.body.records.length; i++) {
-            var item = response.data.body.records[i];
-            if (item.adopted == true) {
-              item["status"] = "已领养";
-            } else {
-              item["status"] = "未领养";
-            }
-            this.tableData.list.push(item);
-          }
-          this.totalNum = response.data.body.sumNum;
-        })
-        .catch((response) => {
-          console.log(response);
-          ElMessage.error("网络错误");
-        });
-      this.loading = false;
     },
     confirm1() {
+      console.log(this.lastImage)
       //新增
       Axios.post(
         "/api/admin/animal/addrecord",
@@ -409,33 +384,15 @@ export default defineComponent({
           if (response.data.code != 0) {
             ElMessage(response.data.message);
           } else {
-            ElMessage("Success!");
+            ElMessage('Success!');
           }
-        })
-        .catch((response) => {
-          console.log(response);
-          ElMessage.error("网络错误");
-        });
-      this.loading = true;
-      Axios.post(
-        "/api/admin/animal/get",
-        {
-          pageNum: 20,
-          page: 0,
-          context: this.context,
-        },
-        { headers }
-      )
-        .then((response) => {
-          ElMessage.success('修改成功')
-          setTimeout(1000);
+          setTimeout(1500)
           this.$router.go(0)
         })
         .catch((response) => {
           console.log(response);
           ElMessage.error("网络错误");
         });
-      this.loading = false;
     },
     handleCurrentChange(index) {
       this.loading = true;
